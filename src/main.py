@@ -8,6 +8,7 @@
 
 
 
+
 from landscape import generate_fitness_landscape, create_skill_map
 from agents import initialize_agents
 from simulation import step_simulation
@@ -34,6 +35,7 @@ def on_click(event):
         print("No agents moved")
 
 # Add the button to trigger a simulation step
+# TODO: instead of a button, we can make automaticly run for some number of steps
 button = Button(plt.axes([0.4, 0.1, 0.2, 0.05]), "Next Step")
 button.on_clicked(on_click)
 

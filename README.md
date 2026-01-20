@@ -10,6 +10,27 @@ Akçakır, G., Lang, J.C. & Lamberson, P.J. Copy or collaborate? How networks im
 
 ---
 
+## TA questions
+- Does poster have to be printed?
+- Do we need a phase plot?
+- Is our idea good?
+
+## TODO
+
+- (agents.py) Agents must die and be replaced
+- (agents.py) Decide on network structure (linear, fully or partially connected)
+- (simulation.py) measure average / best fitness value
+- (simulation.py) make pipeline automatic
+- (simulation.py) collect (save) data on turnover rate and fitness values for each simulation step
+- (visualisation.py) create plots with varying turnover rate vs best average fitness
+- Do a literature review
+- (visualisation.py) do statistical test
+- are all functionalities implemented?
+
+
+
+---
+
 ## Project Description
 
 People working together often solve problems more effectively than individuals working alone. This effect is especially pronounced in **multi-disciplinary research**, where individuals possess different knowledge and skills.
