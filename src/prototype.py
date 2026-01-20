@@ -3,6 +3,8 @@ from noise import pnoise2
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button
 
+#NOTE: download required packages: pip install -r requirements.txt
+
 # params :)
 N = 100 # grid size (N x N cells)
 S = 100 # number of skills / colors
