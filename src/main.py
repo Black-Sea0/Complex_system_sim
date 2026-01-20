@@ -3,6 +3,8 @@
 # Run this file to run entire simulation pipeline and visualisation.
 # You may look into other files for 'TODO' comments to see what to work on
 
+# NOTE: download required packages: pip install -r requirements.txt
+
 
 
 
