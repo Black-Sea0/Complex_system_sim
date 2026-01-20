@@ -2,7 +2,7 @@
 
 This project explores how **collaboration and imitation (copying)** influence collective problem-solving performance in a dynamic multi-agent system. Inspired by real-world research environments, we model agents navigating an artificial fitness landscape while sharing and leveraging heterogeneous skills.
 
-This project is inspired by and heavily based on the research paper: 
+This project is inspired by and heavily based on the following research paper: 
 
 Akçakır, G., Lang, J.C. & Lamberson, P.J. Copy or collaborate? How networks impact collective problem solving. npj Complex 2, 35 (2025). https://doi.org/10.1038/s44260-025-00058-8 
 (GitHub: https://github.com/gulsahakcakir/Group-Problem-Solving)
@@ -88,4 +88,5 @@ pip install -r requirements.txt
 
 ## Authors
 Sooriya Karunaharan, Alara Karadeniz, Ivo Blok, Gileesa McCormack
+
 University of Amsterdam / Msc Compuational Sciencde / Complex System Simulation Course
