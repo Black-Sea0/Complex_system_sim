@@ -31,12 +31,22 @@ fig, ax, scatters = setup_plot(board, agents)
 def on_click(event):
     moved = step_simulation(N, r, skills, agents, board, p, A)  # Updates agent positions
     update_plot(scatters, agents)                 # Reflect changes visually
+    print("Simulation step completed")
     if not moved:
         print("No agents moved")
+
+def run_simulation(event):
+    for _ in range(20):
+        moved = step_simulation(N, r, skills, agents, board, p, A)
+        update_plot(scatters, agents)
+        print("Simulation step completed")
+        if not moved:
+            print("No agents moved")
+            
 
 # Add the button to trigger a simulation step
 # TODO: instead of a button, we can make automaticly run for some number of steps
 button = Button(plt.axes([0.4, 0.1, 0.2, 0.05]), "Next Step")
-button.on_clicked(on_click)
+button.on_clicked(run_simulation)
 
 plt.show()
