@@ -10,11 +10,12 @@
 
 
 from landscape import generate_fitness_landscape, create_skill_map
-from agents import initialize_agents
+from agents import initialize_agents, get_average_fitness, get_max_fitness
 from simulation import step_simulation
 from visualisation import setup_plot, update_plot
 from matplotlib.widgets import Button
 import matplotlib.pyplot as plt
+from statistical import save_fitness_metrics
 from config import *
 
 # Generate fitness landscape and skill map
@@ -36,12 +37,13 @@ def on_click(event):
         print("No agents moved")
 
 def run_simulation(event):
-    for _ in range(20):
+    for _ in range(N_steps):
         moved = step_simulation(N, r, skills, agents, board, p, A)
+        save_fitness_metrics(agents)  # Save fitness metrics after each step
         update_plot(scatters, agents)
         if not moved:
             print("No agents moved")
-    print("Simulation: 20 steps completed")
+    print(f"Simulation: {N_steps} steps completed")
             
 
 # Add the button to trigger a simulation step

@@ -13,3 +13,5 @@ r = 6    # Euclidean cutoff radius for skill-based collaboration
 NOISE_OCTAVES = 5
 NOISE_PERSISTENCE = 2
 NOISE_LACUNARITY = 2
+
+N_steps = 20  # Number of simulation steps to run
