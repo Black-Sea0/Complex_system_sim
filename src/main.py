@@ -5,6 +5,12 @@
 
 # NOTE: download required packages: pip install -r requirements.txt
 
+
+
+
+
+from landscape import generate_fitness_landscape, create_skill_map
+from agents import initialize_agents, replace_agents
 from landscape import generate_fitness_landscape, create_skill_map, mason_watts_landscape
 from agents import initialize_agents, get_average_fitness, get_max_fitness
 from simulation import step_simulation
@@ -27,17 +33,21 @@ fig, ax, scatters = setup_plot(board, agents)
 
 # Define the button callback
 def on_click(event):
+    global agents
     moved = step_simulation(N, r, skills, agents, board, p, A)  # Updates agent positions
+    agents = replace_agents(agents, board, A, N, S, t)
     update_plot(scatters, agents)                 # Reflect changes visually
     print("Simulation step completed")
     if not moved:
         print("No agents moved")
 
 # Define a simulation runner for multiple steps
-def run_simulation(event):   
+def run_simulation(event): 
+    global agents
     for i in range(N_runs):
         for _ in range(N_steps):
             moved = step_simulation(N, r, skills, agents, board, p, A)
+            agents = replace_agents(agents, board, A, N, S, t)
             save_fitness_metrics(agents, csv_filename=f"fitness_metrics_{i}.csv")  # Save fitness metrics after each step
             update_plot(scatters, agents)
             if not moved:
