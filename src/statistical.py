@@ -88,6 +88,28 @@ def save_fitness_metrics(agents, csv_filename="fitness_metrics.csv", data_folder
 
 
 def combine_fitness_metrics(data_folder=DATA_PATH, prefix="fitness_metrics", N=None):
+    """
+    Load all fitness metric CSV files with a given prefix, compute the
+    average and standard deviation of fitness per simulation step,
+    and save the averaged values to a CSV.
+
+    Parameters
+    ----------
+    data_folder : str or Path
+        Path to the folder containing CSV files.
+    prefix : str
+        Filename prefix to match (default: 'fitness_metrics').
+    N : int or None
+        Number of steps (rows) to include. If None, use all available rows.
+
+    Returns
+    -------
+    pd.DataFrame
+        DataFrame with columns:
+        - 'average_fitness_mean', 'average_fitness_std'
+        - 'max_fitness_mean', 'max_fitness_std'
+        Each row corresponds to a simulation step.
+    """
     data_path = Path(data_folder)
 
     if not data_path.exists():
@@ -103,15 +125,25 @@ def combine_fitness_metrics(data_folder=DATA_PATH, prefix="fitness_metrics", N=N
     dfs = []
     for csv_file in csv_files:
         df = pd.read_csv(csv_file)
-
         if N is not None:
             df = df.iloc[:N]
-
         dfs.append(df)
 
     combined = pd.concat(dfs, axis=0)
-    averaged = combined.groupby(combined.index).mean()
 
+    # Compute mean and std per step
+    mean_df = combined.groupby(combined.index).mean()
+    std_df = combined.groupby(combined.index).std()
+
+    # Rename columns to indicate mean and std
+    averaged = pd.DataFrame({
+        "average_fitness_mean": mean_df["average_fitness"],
+        "average_fitness_std": std_df["average_fitness"],
+        "max_fitness_mean": mean_df["max_fitness"],
+        "max_fitness_std": std_df["max_fitness"]
+    })
+
+    # Save to CSV
     averaged.to_csv(data_path / "averaged_fitness_metrics.csv", index=False)
 
     return averaged

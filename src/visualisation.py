@@ -58,15 +58,14 @@ def update_plot(scatters, agents):
         scatters[i].set_offsets([[agent["pos"][1], agent["pos"][0]]])
     plt.draw()
 
-
 def create_fitness_plot(csv_filename="averaged_fitness_metrics.csv", data_folder="data"):
     """
-    Load fitness metrics from a CSV file and plot average and maximum fitness
-    over simulation steps.
+    Load averaged fitness metrics from a CSV file and plot average and maximum fitness
+    over simulation steps with standard deviation as error bars.
 
     The CSV is expected to contain the columns:
-    - 'average_fitness'
-    - 'max_fitness'
+    - 'average_fitness_mean', 'average_fitness_std'
+    - 'max_fitness_mean', 'max_fitness_std'
 
     Each row corresponds to one simulation step.
     """
@@ -77,19 +76,21 @@ def create_fitness_plot(csv_filename="averaged_fitness_metrics.csv", data_folder
     df = pd.read_csv(csv_path)
 
     steps = df.index  # row number = simulation step
-    avg_fitness = df["average_fitness"]
-    max_fitness = df["max_fitness"]
+    avg_mean = df["average_fitness_mean"]
+    avg_std = df["average_fitness_std"]
+    max_mean = df["max_fitness_mean"]
+    max_std = df["max_fitness_std"]
 
-    # Plot
+    # Plot with error bars
     plt.figure(figsize=(8, 5))
-    plt.plot(steps, avg_fitness, 'o-', label="Average Fitness")
-    plt.plot(steps, max_fitness, 'o-', label="Max Fitness")
+
+    plt.errorbar(steps, avg_mean, yerr=avg_std, fmt='o-', capsize=3, label="Average Fitness")
+    plt.errorbar(steps, max_mean, yerr=max_std, fmt='s-', capsize=3, label="Max Fitness")
 
     plt.xlabel("Simulation Step")
     plt.ylabel("Fitness")
-    plt.title("Fitness Over Time")
+    plt.title("Fitness Over Time with Std Dev")
     plt.legend()
     plt.grid(True)
-
     plt.tight_layout()
     plt.show()
