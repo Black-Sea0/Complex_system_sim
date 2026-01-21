@@ -17,14 +17,12 @@ class ComplexOptimizer:
         self.r = r
         self.t = t
 
-    def generate_initial_state(self):
-        self.board = mason_watts_landscape(self.N) # TODO add the settings for noise octaves, persistence etc...
-        self.skills = create_skill_map(self.N, self.S)
-        self.agents = initialize_agents(self.board, self.A, self.N, self.S)
-
     def interactive_simulation(self, reset_initial_state = False):
         if reset_initial_state:
-            self.generate_initial_state()
+            self.board = mason_watts_landscape(self.N)
+
+        self.skills = create_skill_map(self.N, self.S)
+        self.agents = initialize_agents(self.board, self.A, self.N, self.S)
 
         fig, ax, scatters = setup_plot(self.board, self.agents)
 
@@ -42,7 +40,11 @@ class ComplexOptimizer:
 
     def run_simulation(self, timesteps = 20, reset_initial_state = False):
         if reset_initial_state:
-            self.generate_initial_state()
+            self.board = mason_watts_landscape(self.N)
+
+        self.skills = create_skill_map(self.N, self.S)
+        self.agents = initialize_agents(self.board, self.A, self.N, self.S)
+
         data = np.zeros(shape=(timesteps, self.A))
 
         for i in range(timesteps):
