@@ -2,6 +2,9 @@
 
 import numpy as np
 from noise import pnoise2
+import pandas as pd
+from scipy.stats import norm
+from scipy.interpolate import RectBivariateSpline
 
 def generate_fitness_landscape(N, oct, pers, lac):
     """
@@ -51,6 +54,11 @@ def generate_fitness_landscape(N, oct, pers, lac):
             # Gaussian signal to enforce a global optimum
             signal = np.exp(-((i - N // 2) ** 2 + (j - N // 2) ** 2) / (2 * 3 ** 2))
             board_values[i, j] += signal
+
+    # Rescale fitness values to [0, 1]
+    min_val = board_values.min()
+    max_val = board_values.max()
+    board_values = (board_values - min_val) / (max_val - min_val)
     return board_values
 
 def create_skill_map(N, S):
@@ -100,3 +108,78 @@ def get_skill_cells(board_skills, pos, skill, r, N):
                     if board_skills[ni, nj] == skill: 
                         cells.append([ni, nj])
     return np.array(cells)
+
+def mason_watts_landscape(L, seed=None, rho=0.7, omega_min=3, omega_max=7, center_mean=False):
+    """
+    Generate a 2D fitness landscape inspired by Mason & Watts (R version).
+
+    The landscape combines a dominant unimodal Gaussian peak with 
+    multi-scale smooth noise (Perlin-like) to create a discrete NxN grid 
+    that is locally correlated and visually smooth. This is intended to 
+    simulate complex problem spaces where neighboring solutions have 
+    similar fitness values, but with some local variation.
+
+    Parameters
+    ----------
+    L : int
+        Size of one dimension of the square grid (NxN).
+    seed : int or None, optional
+        Seed for the random number generator (default: None).
+    rho : float, optional
+        Scaling factor for the amplitude of successive noise octaves
+        (default: 0.7). Lower values reduce the contribution of higher-frequency noise.
+    omega_min : int, optional
+        Minimum octave index for generating smooth noise (default: 3).
+    omega_max : int, optional
+        Maximum octave index for generating smooth noise (default: 7).
+    center_mean : bool, optional
+        If True, the Gaussian peak is centered in the middle of the grid;
+        otherwise, it is randomly positioned (default: False).
+
+    Returns
+    -------
+    np.ndarray
+        A 2D array of shape (L, L) representing the fitness of each cell.
+        Fitness values are scaled such that the maximum value is 100.0.
+        The grid is discrete but visually smooth due to the combination of
+        Gaussian signal and interpolated multi-scale noise.
+    """
+    rng = np.random.default_rng(seed)
+
+    # 1) Unimodal bivariate Gaussian "signal"
+    R = 3 * (L / 100.0)
+    sd = np.sqrt(R)
+
+    xs = np.arange(1, L + 1)
+
+    if center_mean:
+        mu_x = (L + 1) / 2.0
+        mu_y = (L + 1) / 2.0
+    else:
+        mu_x = rng.uniform(1, L)
+        mu_y = rng.uniform(1, L)
+
+    X = norm.pdf(xs, loc=mu_x, scale=sd)
+    Y = norm.pdf(xs, loc=mu_y, scale=sd)
+
+    fitness = np.outer(X, Y)
+    fitness = fitness / np.max(fitness)
+
+    # 2) "Perlin noise" (value noise + bicubic interpolation)
+    fine = np.arange(1, L + 1)
+
+    for omega in range(omega_min, omega_max + 1):
+        octave = 2 ** omega
+        coarse = rng.uniform(0.0, 1.0, size=(octave, octave))
+        coarse_seq = np.linspace(1, L, num=octave)
+
+        spline = RectBivariateSpline(coarse_seq, coarse_seq, coarse, kx=3, ky=3)
+        octave_full = spline(fine, fine)  # (L, L)
+
+        octave_full *= (rho ** omega)
+        fitness += octave_full
+
+    # 3) Scale to max=100 (like R)
+    fitness = fitness * (100.0 / np.max(fitness))
+
+    return fitness

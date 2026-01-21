@@ -14,3 +14,6 @@ t = 0.2  # Turnover rate. This rate decides the probability of each agent being 
 NOISE_OCTAVES = 5
 NOISE_PERSISTENCE = 2
 NOISE_LACUNARITY = 2
+
+N_steps = 20  # Number of simulation steps to run
+N_runs = 10 # Number of runs of simulation
