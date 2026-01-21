@@ -4,7 +4,6 @@ from visualisation import setup_plot, update_plot
 from agents import get_adjacent_cells
 from landscape import get_skill_cells
 
-import random
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button
@@ -58,7 +57,7 @@ class ComplexOptimizer:
         data = []
 
         for i in range(num_runs):
-            data.append(self.run_simulation(timesteps), reset_initial_state)
+            data.append(self.run_simulation(timesteps, reset_initial_state))
 
         return data
 
