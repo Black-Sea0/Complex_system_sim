@@ -6,16 +6,13 @@
 # NOTE: download required packages: pip install -r requirements.txt
 
 
-
-
-
 from landscape import generate_fitness_landscape, create_skill_map
 from agents import initialize_agents, get_average_fitness, get_max_fitness
 from simulation import step_simulation
 from visualisation import setup_plot, update_plot
 from matplotlib.widgets import Button
 import matplotlib.pyplot as plt
-from statistical import save_fitness_metrics
+from statistical import save_fitness_metrics, clear_data_fitness
 from config import *
 
 # Generate fitness landscape and skill map
@@ -50,5 +47,9 @@ def run_simulation(event):
 # TODO: instead of a button, we can make automaticly run for some number of steps
 button = Button(plt.axes([0.4, 0.1, 0.2, 0.05]), "Next Step")
 button.on_clicked(run_simulation)
+
+
+# Clear data when main.py is run
+clear_data_fitness()
 
 plt.show()
