@@ -4,6 +4,7 @@
 
 from typing import *
 import numpy as np
+import random
 from agents import get_adjacent_cells
 from landscape import get_skill_cells
 
@@ -58,6 +59,10 @@ def step_simulation(
     # TODO: when the agents teleport to each other (copying), they might land on each other.
     # This is allowed for now, but we might want to prevent it later.
     # It also makes agents seem to 'disappear' in the visualisation.
+
+    #Randomly shuffling the list of agents so that the movement order of the agents are not
+    #same in each generation. 
+    random.shuffle(agents)
 
     for agent_idx in range(A):
         agent = agents[agent_idx]

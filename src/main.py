@@ -10,7 +10,7 @@
 
 
 from landscape import generate_fitness_landscape, create_skill_map
-from agents import initialize_agents
+from agents import initialize_agents, replace_agents
 from simulation import step_simulation
 from visualisation import setup_plot, update_plot
 from matplotlib.widgets import Button
@@ -29,15 +29,19 @@ fig, ax, scatters = setup_plot(board, agents)
 
 # Define the button callback
 def on_click(event):
+    global agents
     moved = step_simulation(N, r, skills, agents, board, p, A)  # Updates agent positions
+    agents = replace_agents(agents, board, A, N, S, t)
     update_plot(scatters, agents)                 # Reflect changes visually
     print("Simulation step completed")
     if not moved:
         print("No agents moved")
 
 def run_simulation(event):
+    global agents
     for _ in range(20):
         moved = step_simulation(N, r, skills, agents, board, p, A)
+        agents = replace_agents(agents, board, A, N, S, t)
         update_plot(scatters, agents)
         if not moved:
             print("No agents moved")
