@@ -5,7 +5,7 @@
 
 # NOTE: download required packages: pip install -r requirements.txt
 
-from landscape import generate_fitness_landscape, create_skill_map
+from landscape import generate_fitness_landscape, create_skill_map, mason_watts_landscape
 from agents import initialize_agents, get_average_fitness, get_max_fitness
 from simulation import step_simulation
 from visualisation import setup_plot, update_plot
@@ -15,7 +15,8 @@ from statistical import save_fitness_metrics, clear_data_fitness
 from config import *
 
 # Generate fitness landscape and skill map
-board = generate_fitness_landscape(N, NOISE_OCTAVES, NOISE_PERSISTENCE, NOISE_LACUNARITY)
+# board = generate_fitness_landscape(N, NOISE_OCTAVES, NOISE_PERSISTENCE, NOISE_LACUNARITY)
+board = mason_watts_landscape(N)
 skills = create_skill_map(N, S)
 
 # Initialize agents
