@@ -9,7 +9,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button
 
-class MyAlgorithm:
+class ComplexOptimizer:
     def __init__(self, N, S, A, p, r, t):
         self.N = N
         self.S = S

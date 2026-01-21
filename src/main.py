@@ -6,11 +6,11 @@
 # NOTE: download required packages: pip install -r requirements.txt
 
 
-from algorithm import MyAlgorithm
+from algorithm import ComplexOptimizer
 import matplotlib.pyplot as plt
 import numpy as np
 
-alg = MyAlgorithm(N=100, S=100, A=16, p=0.8, r=6, t=0)
+alg = ComplexOptimizer(N=100, S=100, A=16, p=0.8, r=6, t=0)
 multi_run_data = alg.run_multiple_simulations(num_runs=2, timesteps=20)
 
 for run_data in multi_run_data:
