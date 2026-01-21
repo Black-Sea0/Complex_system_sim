@@ -2,6 +2,9 @@
 
 import numpy as np
 from noise import pnoise2
+import pandas as pd
+from scipy.stats import norm
+from scipy.interpolate import RectBivariateSpline
 
 def generate_fitness_landscape(N, oct, pers, lac):
     """
@@ -100,3 +103,92 @@ def get_skill_cells(board_skills, pos, skill, r, N):
                     if board_skills[ni, nj] == skill: 
                         cells.append([ni, nj])
     return np.array(cells)
+
+def mason_watts_landscape(L, seed=None, rho=0.7, omega_min=3, omega_max=7, center_mean=False):
+    """
+    Python version of the R function MasonWatts
+    Parameters
+    ----------
+    L : int
+        Grid size (L x L).
+    seed : int or None
+        Random seed for reproducibility.
+    rho : float
+        Persistence parameter (matches R's rho <- 0.7).
+    omega_min, omega_max : int
+        Octave loop bounds (matches R's for (omega in 3:7)).
+    center_mean : bool
+        If True, sets Gaussian means to center (like the commented R lines).
+        If False, uses random means like the default R code.
+
+    Returns
+    -------
+    pandas.DataFrame
+        Columns: x, y, z (z is fitness), matching the R tibble structure.
+        Note: R returns expand.grid(x=1:L, y=1:L) then z=as.vector(matrix).
+              This implementation matches that ordering (x varies fastest).
+    """
+    rng = np.random.default_rng(seed)
+
+    # ----- 1) Unimodal bivariate Gaussian "signal" -----
+    R = 3 * (L / 100.0)          # matches R <- 3 * (L/100)
+    sd = np.sqrt(R)              # matches sd = sqrt(R)
+
+    xs = np.arange(1, L + 1)     # seq(1, L) in R
+
+    if center_mean:
+        mu_x = (L + 1) / 2.0
+        mu_y = (L + 1) / 2.0
+    else:
+        mu_x = rng.uniform(1, L)
+        mu_y = rng.uniform(1, L)
+
+    X = norm.pdf(xs, loc=mu_x, scale=sd)   # dnorm(seq(1,L), mean=..., sd=...)
+    Y = norm.pdf(xs, loc=mu_y, scale=sd)
+
+    fitness = np.outer(X, Y)               # X %*% t(Y)
+
+    # scale to between 0 and 1: fitnessMatrix <- fitnessMatrix * (1/max(fitnessMatrix))
+    fitness = fitness / np.max(fitness)
+
+    # ----- 2) "Perlin noise" procedure (value noise + bicubic interpolation) -----
+    # R: octaveSeq <- seq(1,L, length.out=octave)
+    # R: bicubic.grid(..., dx=1, dy=1) => evaluate on integer grid 1..L
+    fine = np.arange(1, L + 1)
+
+    for omega in range(omega_min, omega_max + 1):
+        octave = 2 ** omega
+
+        # R: octaveMatrix <- matrix(runif(octave^2), ncol=octave, nrow=octave)
+        coarse = rng.uniform(0.0, 1.0, size=(octave, octave))
+
+        # Coarse grid coordinates (like seq(1, L, length.out=octave))
+        coarse_seq = np.linspace(1, L, num=octave)
+
+        # Bicubic interpolation: RectBivariateSpline with kx=3, ky=3 (cubic)
+        spline = RectBivariateSpline(coarse_seq, coarse_seq, coarse, kx=3, ky=3)
+        octave_full = spline(fine, fine)  # shape (L, L)
+
+        # R: octaveMatrix <- octaveMatrix$z * rho^omega
+        octave_full *= (rho ** omega)
+
+        # R: fitnessMatrix <- fitnessMatrix + octaveMatrix
+        fitness += octave_full
+
+    # ----- 3) Scale final matrix to between 1 and 100 (R actually scales to max=100) -----
+    fitness = fitness * (100.0 / np.max(fitness))
+
+    # ----- 4) Return data frame like R's expand.grid + add_column(z=as.vector(fitnessMatrix)) -----
+    # R: Grid <- tibble(expand.grid(x=1:L, y=1:L))
+    # expand.grid(x, y) makes x vary fastest, then y.
+    grid = pd.DataFrame({
+        "x": np.tile(np.arange(1, L + 1), L),
+        "y": np.repeat(np.arange(1, L + 1), L),
+        "z": fitness.reshape(-1, order="F")  # order="F" matches R's column-major as.vector()
+    })
+
+    return grid
+
+# Example:
+# df = mason_watts_landscape(100, seed=123)
+# print(df.head())
