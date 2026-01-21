@@ -5,6 +5,8 @@
 
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button
+from pathlib import Path
+import pandas as pd
 
 def setup_plot(board_values, agents):
     """
@@ -55,3 +57,39 @@ def update_plot(scatters, agents):
     for i, agent in enumerate(agents):
         scatters[i].set_offsets([[agent["pos"][1], agent["pos"][0]]])
     plt.draw()
+
+
+def create_fitness_plot(csv_filename="averaged_fitness_metrics.csv", data_folder="data"):
+    """
+    Load fitness metrics from a CSV file and plot average and maximum fitness
+    over simulation steps.
+
+    The CSV is expected to contain the columns:
+    - 'average_fitness'
+    - 'max_fitness'
+
+    Each row corresponds to one simulation step.
+    """
+    data_path = Path(data_folder)
+    csv_path = data_path / csv_filename
+
+    # Read CSV
+    df = pd.read_csv(csv_path)
+
+    steps = df.index  # row number = simulation step
+    avg_fitness = df["average_fitness"]
+    max_fitness = df["max_fitness"]
+
+    # Plot
+    plt.figure(figsize=(8, 5))
+    plt.plot(steps, avg_fitness, 'o-', label="Average Fitness")
+    plt.plot(steps, max_fitness, 'o-', label="Max Fitness")
+
+    plt.xlabel("Simulation Step")
+    plt.ylabel("Fitness")
+    plt.title("Fitness Over Time")
+    plt.legend()
+    plt.grid(True)
+
+    plt.tight_layout()
+    plt.show()

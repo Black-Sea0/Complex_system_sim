@@ -2,7 +2,10 @@ import csv
 import os
 from pathlib import Path
 from agents import get_average_fitness, get_max_fitness
+import pandas as pd
 
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+DATA_PATH = PROJECT_ROOT / "data"
 
 def clear_data_fitness(csv_filename="fitness_metrics.csv", data_folder="data"):
     """
@@ -53,6 +56,7 @@ def save_fitness_metrics(agents, csv_filename="fitness_metrics.csv", data_folder
     """
 
     print("Saving fitness metrics...")
+
     # Get metrics
     avg_fitness = get_average_fitness(agents)
     max_fitness = get_max_fitness(agents)
@@ -82,4 +86,33 @@ def save_fitness_metrics(agents, csv_filename="fitness_metrics.csv", data_folder
             'max_fitness': max_fitness
         })
 
+
+def combine_fitness_metrics(data_folder=DATA_PATH, prefix="fitness_metrics", N=None):
+    data_path = Path(data_folder)
+
+    if not data_path.exists():
+        raise FileNotFoundError(f"Data folder does not exist: {data_path.resolve()}")
+
+    csv_files = sorted(data_path.glob(f"{prefix}*.csv"))
+
+    if not csv_files:
+        raise FileNotFoundError(
+            f"No CSV files starting with '{prefix}' found in {data_path.resolve()}"
+        )
+
+    dfs = []
+    for csv_file in csv_files:
+        df = pd.read_csv(csv_file)
+
+        if N is not None:
+            df = df.iloc[:N]
+
+        dfs.append(df)
+
+    combined = pd.concat(dfs, axis=0)
+    averaged = combined.groupby(combined.index).mean()
+
+    averaged.to_csv(data_path / "averaged_fitness_metrics.csv", index=False)
+
+    return averaged
 

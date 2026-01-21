@@ -7,11 +7,14 @@
 
 from landscape import generate_fitness_landscape, create_skill_map, mason_watts_landscape
 from agents import initialize_agents, get_average_fitness, get_max_fitness
+
+from landscape import generate_fitness_landscape, create_skill_map
+from agents import initialize_agents
 from simulation import step_simulation
-from visualisation import setup_plot, update_plot
+from visualisation import setup_plot, update_plot, create_fitness_plot
 from matplotlib.widgets import Button
 import matplotlib.pyplot as plt
-from statistical import save_fitness_metrics, clear_data_fitness
+from statistical import save_fitness_metrics, clear_data_fitness, combine_fitness_metrics
 from config import *
 
 # Generate fitness landscape and skill map
@@ -43,12 +46,27 @@ def run_simulation(event):
             print("No agents moved")
     print(f"Simulation: {N_steps} steps completed")
             
+    for i in range(N_runs):
+        for _ in range(N_steps):
+            moved = step_simulation(N, r, skills, agents, board, p, A)
+            save_fitness_metrics(agents, csv_filename=f"fitness_metrics_{i}.csv")  # Save fitness metrics after each step
+            update_plot(scatters, agents)
+            if not moved:
+                print("No agents moved")
+        print(f"Simulation: {N_steps} steps completed")
+    combine_fitness_metrics()
+            
+
 # Add the button to trigger a simulation step
 button = Button(plt.axes([0.4, 0.1, 0.2, 0.05]), "Next Step")
 button.on_clicked(run_simulation)
 
 
 # Clear data when main.py is run
-clear_data_fitness()
+for i in range(N_runs):
+    clear_data_fitness(csv_filename=f"fitness_metrics_{i}.csv")
+clear_data_fitness(csv_filename="averaged_fitness_metrics.csv")
 
 plt.show()
+
+create_fitness_plot()
