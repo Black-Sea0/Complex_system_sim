@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 alg = ComplexOptimizer(N=100, S=100, A=16, p=0.8, r=6, t=0)
+alg.generate_initial_state()
 multi_run_data = alg.run_multiple_simulations(num_runs=2, timesteps=20)
 
 for run_data in multi_run_data:
