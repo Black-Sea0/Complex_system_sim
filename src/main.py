@@ -5,57 +5,17 @@
 
 # NOTE: download required packages: pip install -r requirements.txt
 
-from landscape import generate_fitness_landscape, create_skill_map, mason_watts_landscape
-from agents import initialize_agents, get_average_fitness, get_max_fitness
-from simulation import step_simulation
-from visualisation import setup_plot, update_plot, create_fitness_plot
-from matplotlib.widgets import Button
+
+from algorithm import ComplexOptimizer
 import matplotlib.pyplot as plt
-from statistical import save_fitness_metrics, clear_data_fitness, combine_fitness_metrics
-from config import *
+import numpy as np
 
-# Generate fitness landscape and skill map
-# board = generate_fitness_landscape(N, NOISE_OCTAVES, NOISE_PERSISTENCE, NOISE_LACUNARITY)
-board = mason_watts_landscape(N)
-skills = create_skill_map(N, S)
+alg = ComplexOptimizer(N=100, S=100, A=16, p=0.8, r=6, t=0)
+multi_run_data = alg.run_multiple_simulations(num_runs=2, timesteps=20)
 
-# Initialize agents
-agents = initialize_agents(board, A, N, S)
+for run_data in multi_run_data:
+    run_data_avg = np.average(run_data, axis=1)
+    plt.plot(run_data_avg, linewidth=1)
 
-# Set up the plot
-fig, ax, scatters = setup_plot(board, agents)
-
-# Define the button callback
-def on_click(event):
-    moved = step_simulation(N, r, skills, agents, board, p, A)  # Updates agent positions
-    update_plot(scatters, agents)                 # Reflect changes visually
-    print("Simulation step completed")
-    if not moved:
-        print("No agents moved")
-
-# Define a simulation runner for multiple steps
-def run_simulation(event):   
-    for i in range(N_runs):
-        for _ in range(N_steps):
-            moved = step_simulation(N, r, skills, agents, board, p, A)
-            save_fitness_metrics(agents, csv_filename=f"fitness_metrics_{i}.csv")  # Save fitness metrics after each step
-            update_plot(scatters, agents)
-            if not moved:
-                print("No agents moved")
-        print(f"Simulation: {N_steps} steps completed")
-    combine_fitness_metrics()
-            
-
-# Add the button to trigger a simulation step
-button = Button(plt.axes([0.4, 0.1, 0.2, 0.05]), "Next Step")
-button.on_clicked(run_simulation)
-
-
-# Clear data when main.py is run
-for i in range(N_runs):
-    clear_data_fitness(csv_filename=f"fitness_metrics_{i}.csv")
-clear_data_fitness(csv_filename="averaged_fitness_metrics.csv")
-
+plt.legend()
 plt.show()
-
-create_fitness_plot()
