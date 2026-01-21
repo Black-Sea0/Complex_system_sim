@@ -8,13 +8,14 @@
 
 from algorithm import MyAlgorithm
 import matplotlib.pyplot as plt
-
-# Define a simulation runner for multiple steps
+import numpy as np
 
 alg = MyAlgorithm(N=100, S=100, A=16, p=0.8, r=6, t=0)
-single_run_data = alg.run_simulation()
+multi_run_data = alg.run_multiple_simulations(num_runs=2, timesteps=20)
 
-for i in range(single_run_data.shape[1]):
-    plt.plot(single_run_data[:, i], alpha=0.4)
+for run_data in multi_run_data:
+    run_data_avg = np.average(run_data, axis=1)
+    plt.plot(run_data_avg, linewidth=1)
 
+plt.legend()
 plt.show()
