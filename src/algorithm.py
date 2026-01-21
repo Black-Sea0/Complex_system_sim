@@ -23,8 +23,9 @@ class ComplexOptimizer:
         self.skills = create_skill_map(self.N, self.S)
         self.agents = initialize_agents(self.board, self.A, self.N, self.S)
 
-    def interactive_simulation(self):
-        self.generate_initial_state()
+    def interactive_simulation(self, reset_initial_state = False):
+        if reset_initial_state:
+            self.generate_initial_state()
 
         fig, ax, scatters = setup_plot(self.board, self.agents)
 
@@ -40,8 +41,9 @@ class ComplexOptimizer:
         button.on_clicked(on_click)
         plt.show()
 
-    def run_simulation(self, timesteps = 20):
-        self.generate_initial_state()
+    def run_simulation(self, timesteps = 20, reset_initial_state = False):
+        if reset_initial_state:
+            self.generate_initial_state()
         data = np.zeros(shape=(timesteps, self.A))
 
         for i in range(timesteps):
@@ -52,11 +54,11 @@ class ComplexOptimizer:
 
         return data
 
-    def run_multiple_simulations(self, num_runs, timesteps = 20):
+    def run_multiple_simulations(self, num_runs, timesteps = 20, reset_initial_state = False):
         data = []
 
         for i in range(num_runs):
-            data.append(self.run_simulation(timesteps))
+            data.append(self.run_simulation(timesteps), reset_initial_state)
 
         return data
 
