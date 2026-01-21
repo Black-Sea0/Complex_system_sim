@@ -106,7 +106,38 @@ def get_skill_cells(board_skills, pos, skill, r, N):
 
 def mason_watts_landscape(L, seed=None, rho=0.7, omega_min=3, omega_max=7, center_mean=False):
     """
-    Python version of the R function MasonWatts.
+    Generate a 2D fitness landscape inspired by Mason & Watts (R version).
+
+    The landscape combines a dominant unimodal Gaussian peak with 
+    multi-scale smooth noise (Perlin-like) to create a discrete NxN grid 
+    that is locally correlated and visually smooth. This is intended to 
+    simulate complex problem spaces where neighboring solutions have 
+    similar fitness values, but with some local variation.
+
+    Parameters
+    ----------
+    L : int
+        Size of one dimension of the square grid (NxN).
+    seed : int or None, optional
+        Seed for the random number generator (default: None).
+    rho : float, optional
+        Scaling factor for the amplitude of successive noise octaves
+        (default: 0.7). Lower values reduce the contribution of higher-frequency noise.
+    omega_min : int, optional
+        Minimum octave index for generating smooth noise (default: 3).
+    omega_max : int, optional
+        Maximum octave index for generating smooth noise (default: 7).
+    center_mean : bool, optional
+        If True, the Gaussian peak is centered in the middle of the grid;
+        otherwise, it is randomly positioned (default: False).
+
+    Returns
+    -------
+    np.ndarray
+        A 2D array of shape (L, L) representing the fitness of each cell.
+        Fitness values are scaled such that the maximum value is 100.0.
+        The grid is discrete but visually smooth due to the combination of
+        Gaussian signal and interpolated multi-scale noise.
     """
     rng = np.random.default_rng(seed)
 
