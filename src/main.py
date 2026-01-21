@@ -9,13 +9,22 @@
 from algorithm import ComplexOptimizer
 import matplotlib.pyplot as plt
 import numpy as np
+from config import *
+from statistical import combine_fitness_metrics, clear_data_fitness
 
-alg = ComplexOptimizer(N=100, S=100, A=16, p=0.8, r=6, t=0)
-multi_run_data = alg.run_multiple_simulations(num_runs=2, timesteps=20)
+
+for p in p_list:
+    alg = ComplexOptimizer(N=N, S=S, A=A, p=p, r=r, t=0)
+    multi_run_data = alg.run_multiple_simulations(num_runs=N_runs, timesteps=N_steps)
 
 for run_data in multi_run_data:
     run_data_avg = np.average(run_data, axis=1)
     plt.plot(run_data_avg, linewidth=1)
+
+
+for p in p_list:
+    combine_fitness_metrics(prefix=f"fitness_metrics_p_{p}", output_file_name=f"averaged_fitness_metrics_p_{p}.csv")
+
 
 plt.legend()
 plt.show()
