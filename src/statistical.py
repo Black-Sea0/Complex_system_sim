@@ -3,6 +3,8 @@ import os
 from pathlib import Path
 from agents import get_average_fitness, get_max_fitness
 import pandas as pd
+from scipy.stats import t
+import numpy as np
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DATA_PATH = PROJECT_ROOT / "data"
@@ -87,10 +89,10 @@ def save_fitness_metrics(agents, csv_filename="fitness_metrics.csv", data_folder
         })
 
 
-def combine_fitness_metrics(data_folder=DATA_PATH, prefix="fitness_metrics", N=None):
+def combine_fitness_metrics(data_folder=DATA_PATH, prefix="fitness_metrics", N=None, ci=0.95):
     """
     Load all fitness metric CSV files with a given prefix, compute the
-    average and standard deviation of fitness per simulation step,
+    mean and confidence intervals for average and max fitness per simulation step,
     and save the averaged values to a CSV.
 
     Parameters
@@ -101,13 +103,15 @@ def combine_fitness_metrics(data_folder=DATA_PATH, prefix="fitness_metrics", N=N
         Filename prefix to match (default: 'fitness_metrics').
     N : int or None
         Number of steps (rows) to include. If None, use all available rows.
+    ci : float
+        Confidence level for the error intervals (default: 0.95).
 
     Returns
     -------
     pd.DataFrame
         DataFrame with columns:
-        - 'average_fitness_mean', 'average_fitness_std'
-        - 'max_fitness_mean', 'max_fitness_std'
+        - 'average_fitness_mean', 'average_fitness_lower', 'average_fitness_upper'
+        - 'max_fitness_mean', 'max_fitness_lower', 'max_fitness_upper'
         Each row corresponds to a simulation step.
     """
     data_path = Path(data_folder)
@@ -116,11 +120,8 @@ def combine_fitness_metrics(data_folder=DATA_PATH, prefix="fitness_metrics", N=N
         raise FileNotFoundError(f"Data folder does not exist: {data_path.resolve()}")
 
     csv_files = sorted(data_path.glob(f"{prefix}*.csv"))
-
     if not csv_files:
-        raise FileNotFoundError(
-            f"No CSV files starting with '{prefix}' found in {data_path.resolve()}"
-        )
+        raise FileNotFoundError(f"No CSV files starting with '{prefix}' found in {data_path.resolve()}")
 
     dfs = []
     for csv_file in csv_files:
@@ -129,22 +130,35 @@ def combine_fitness_metrics(data_folder=DATA_PATH, prefix="fitness_metrics", N=N
             df = df.iloc[:N]
         dfs.append(df)
 
-    combined = pd.concat(dfs, axis=0)
+    n_runs = len(dfs)
 
-    # Compute mean and std per step
-    mean_df = combined.groupby(combined.index).mean()
-    std_df = combined.groupby(combined.index).std()
+    # Combine runs into arrays: steps x runs
+    avg_arr = np.stack([df["average_fitness"].values for df in dfs], axis=1)
+    max_arr = np.stack([df["max_fitness"].values for df in dfs], axis=1)
 
-    # Rename columns to indicate mean and std
+    # --- Average fitness: mean + t-based confidence interval ---
+    avg_mean = avg_arr.mean(axis=1)
+    avg_std = avg_arr.std(axis=1, ddof=1)
+    t_val = t.ppf(1 - (1 - ci)/2, df=n_runs - 1)
+    avg_lower = np.clip(avg_mean - t_val * (avg_std / np.sqrt(n_runs)), 0, 100)
+    avg_upper = np.clip(avg_mean + t_val * (avg_std / np.sqrt(n_runs)), 0, 100)
+
+    # --- Max fitness: percentile-based interval ---
+    max_mean = max_arr.mean(axis=1)
+    max_lower = np.clip(np.percentile(max_arr, 2.5, axis=1), 0, 100)
+    max_upper = np.clip(np.percentile(max_arr, 97.5, axis=1), 0, 100)
+
+    # Combine into DataFrame
     averaged = pd.DataFrame({
-        "average_fitness_mean": mean_df["average_fitness"],
-        "average_fitness_std": std_df["average_fitness"],
-        "max_fitness_mean": mean_df["max_fitness"],
-        "max_fitness_std": std_df["max_fitness"]
+        "average_fitness_mean": avg_mean,
+        "average_fitness_lower": avg_lower,
+        "average_fitness_upper": avg_upper,
+        "max_fitness_mean": max_mean,
+        "max_fitness_lower": max_lower,
+        "max_fitness_upper": max_upper
     })
 
     # Save to CSV
     averaged.to_csv(data_path / "averaged_fitness_metrics.csv", index=False)
 
     return averaged
-

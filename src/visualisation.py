@@ -61,11 +61,11 @@ def update_plot(scatters, agents):
 def create_fitness_plot(csv_filename="averaged_fitness_metrics.csv", data_folder="data"):
     """
     Load averaged fitness metrics from a CSV file and plot average and maximum fitness
-    over simulation steps with standard deviation as error bars.
+    over simulation steps with shaded error regions (95% CI for average, 2.5-97.5 percentile for max).
 
     The CSV is expected to contain the columns:
-    - 'average_fitness_mean', 'average_fitness_std'
-    - 'max_fitness_mean', 'max_fitness_std'
+    - 'average_fitness_mean', 'average_fitness_lower', 'average_fitness_upper'
+    - 'max_fitness_mean', 'max_fitness_lower', 'max_fitness_upper'
 
     Each row corresponds to one simulation step.
     """
@@ -76,20 +76,30 @@ def create_fitness_plot(csv_filename="averaged_fitness_metrics.csv", data_folder
     df = pd.read_csv(csv_path)
 
     steps = df.index  # row number = simulation step
-    avg_mean = df["average_fitness_mean"]
-    avg_std = df["average_fitness_std"]
-    max_mean = df["max_fitness_mean"]
-    max_std = df["max_fitness_std"]
 
-    # Plot with error bars
+    # Average fitness
+    avg_mean = df["average_fitness_mean"]
+    avg_lower = df["average_fitness_lower"]
+    avg_upper = df["average_fitness_upper"]
+
+    # Max fitness
+    max_mean = df["max_fitness_mean"]
+    max_lower = df["max_fitness_lower"]
+    max_upper = df["max_fitness_upper"]
+
     plt.figure(figsize=(8, 5))
 
-    plt.errorbar(steps, avg_mean, yerr=avg_std, fmt='o-', capsize=3, label="Average Fitness")
-    plt.errorbar(steps, max_mean, yerr=max_std, fmt='s-', capsize=3, label="Max Fitness")
+    # Plot average fitness with shaded CI
+    plt.plot(steps, avg_mean, 'o-', label="Average Fitness")
+    plt.fill_between(steps, avg_lower, avg_upper, color='blue', alpha=0.2)
+
+    # Plot max fitness with shaded percentile interval
+    plt.plot(steps, max_mean, 's-', label="Max Fitness", color='orange')
+    plt.fill_between(steps, max_lower, max_upper, color='orange', alpha=0.2)
 
     plt.xlabel("Simulation Step")
     plt.ylabel("Fitness")
-    plt.title("Fitness Over Time with Std Dev")
+    plt.title("Fitness Over Time with Confidence Intervals")
     plt.legend()
     plt.grid(True)
     plt.tight_layout()
