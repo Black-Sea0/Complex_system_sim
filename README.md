@@ -18,8 +18,10 @@ Akçakır, G., Lang, J.C. & Lamberson, P.J. Copy or collaborate? How networks im
 ## TODO
 
 - (agents.py) Agents must die and be replaced
+  - Generate 16 agents at starts;
+  - Give each agent a random lifetime OR (equivalently) give each agent a chance to die each simulation step
 - (agents.py) Decide on network structure (linear, fully or partially connected)
-- (simulation.py) measure average / best fitness value
+- (simulation.py) measure average / best fitness value (gileesa)
 - (simulation.py) make pipeline automatic
 - (simulation.py) collect (save) data on turnover rate and fitness values for each simulation step
 - (visualisation.py) create plots with varying turnover rate vs best average fitness
