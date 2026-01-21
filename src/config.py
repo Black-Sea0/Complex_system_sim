@@ -1,12 +1,12 @@
 # contains all parameters for the simulation
 
-
+import numpy as np
 
 # PARAMETERS
 N = 100  # Grid size (N x N cells)
 S = 100  # Number of distinct skills (also used as colors)
 A = 16   # Number of agents
-p = 0.8  # Probability of collaboration (vs copying)
+p_list = np.linspace(0, 1, 11)  # Probability of collaboration (vs copying)
 r = 6    # Euclidean cutoff radius for skill-based collaboration
 
 # Params by ChatGPT:
