@@ -15,20 +15,18 @@ Akçakır, G., Lang, J.C. & Lamberson, P.J. Copy or collaborate? How networks im
 
 ## TODO
 
-- (agents.py) Agents must die and be replaced
+- (agents.py) Agents must die and be replaced - Alara
   - Generate 16 agents at starts;
   - Give each agent a random lifetime OR (equivalently) give each agent a chance to die each simulation step
-- (agents.py) Decide on network structure (linear, fully or partially connected)
-- (simulation.py) measure average / best fitness value (gileesa)
-- (simulation.py) make pipeline automatic
-- (simulation.py) collect (save) data on turnover rate and fitness values for each simulation step
+- (agents.py) Decide on network structure (linear, fully or partially connected) - fully connected
+- (simulation.py) measure average / best fitness value - Gileesa 
+- (simulation.py) make pipeline automatic - Sooriyaa
+- (simulation.py) collect (save) data on turnover rate and fitness values for each simulation step - Gilessa
 - (visualisation.py) create plots with varying turnover rate vs best average fitness
 - Do a literature review
 - (visualisation.py) do statistical test
 - are all functionalities implemented?
-
-
-
+  
 ---
 
 ## Project Description
