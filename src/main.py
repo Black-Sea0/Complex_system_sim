@@ -7,9 +7,6 @@
 
 from landscape import generate_fitness_landscape, create_skill_map, mason_watts_landscape
 from agents import initialize_agents, get_average_fitness, get_max_fitness
-
-from landscape import generate_fitness_landscape, create_skill_map
-from agents import initialize_agents
 from simulation import step_simulation
 from visualisation import setup_plot, update_plot, create_fitness_plot
 from matplotlib.widgets import Button
@@ -37,15 +34,7 @@ def on_click(event):
         print("No agents moved")
 
 # Define a simulation runner for multiple steps
-def run_simulation(event):
-    for _ in range(N_steps):
-        moved = step_simulation(N, r, skills, agents, board, p, A)
-        save_fitness_metrics(agents)  # Save fitness metrics after each step
-        update_plot(scatters, agents)
-        if not moved:
-            print("No agents moved")
-    print(f"Simulation: {N_steps} steps completed")
-            
+def run_simulation(event):   
     for i in range(N_runs):
         for _ in range(N_steps):
             moved = step_simulation(N, r, skills, agents, board, p, A)
