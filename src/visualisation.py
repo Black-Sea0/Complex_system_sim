@@ -82,8 +82,8 @@ def create_fitness_plot(csv_filename="averaged_fitness_metrics.csv", data_folder
 
     # Plot
     plt.figure(figsize=(8, 5))
-    plt.plot(steps, avg_fitness, label="Average Fitness")
-    plt.plot(steps, max_fitness, label="Max Fitness")
+    plt.plot(steps, avg_fitness, 'o-', label="Average Fitness")
+    plt.plot(steps, max_fitness, 'o-', label="Max Fitness")
 
     plt.xlabel("Simulation Step")
     plt.ylabel("Fitness")

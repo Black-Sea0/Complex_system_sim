@@ -51,6 +51,11 @@ def generate_fitness_landscape(N, oct, pers, lac):
             # Gaussian signal to enforce a global optimum
             signal = np.exp(-((i - N // 2) ** 2 + (j - N // 2) ** 2) / (2 * 3 ** 2))
             board_values[i, j] += signal
+
+    # Rescale fitness values to [0, 1]
+    min_val = board_values.min()
+    max_val = board_values.max()
+    board_values = (board_values - min_val) / (max_val - min_val)
     return board_values
 
 def create_skill_map(N, S):

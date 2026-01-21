@@ -12,7 +12,7 @@ from simulation import step_simulation
 from visualisation import setup_plot, update_plot, create_fitness_plot
 from matplotlib.widgets import Button
 import matplotlib.pyplot as plt
-from statistical import save_fitness_metrics, clear_data_fitness
+from statistical import save_fitness_metrics, clear_data_fitness, combine_fitness_metrics
 from config import *
 
 # Generate fitness landscape and skill map
@@ -42,6 +42,7 @@ def run_simulation(event):
             if not moved:
                 print("No agents moved")
         print(f"Simulation: {N_steps} steps completed")
+    combine_fitness_metrics()
             
 
 # Add the button to trigger a simulation step
@@ -53,6 +54,7 @@ button.on_clicked(run_simulation)
 # Clear data when main.py is run
 for i in range(N_runs):
     clear_data_fitness(csv_filename=f"fitness_metrics_{i}.csv")
+clear_data_fitness(csv_filename="averaged_fitness_metrics.csv")
 
 plt.show()
 
