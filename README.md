@@ -11,9 +11,7 @@ Akçakır, G., Lang, J.C. & Lamberson, P.J. Copy or collaborate? How networks im
 ---
 
 ## TA questions
-- Does poster have to be printed?
 - Do we need a phase plot?
-- Is our idea good?
 
 ## TODO
 
