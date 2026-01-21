@@ -75,3 +75,37 @@ def get_adjacent_cells(N, pos):
             if 0 <= ni < N and 0 <= nj < N:
                 cells.append([ni, nj])
     return np.array(cells)
+
+def get_average_fitness(agents):
+    """
+    Calculate the average fitness (payoff) of all agents.
+
+    Parameters
+    ----------
+    agents : list of dict
+        List of agents, each with a 'payoff' key.
+
+    Returns
+    -------
+    float
+        The average fitness of the agents.
+    """
+    total_fitness = sum(agent["payoff"] for agent in agents)
+    return total_fitness / len(agents) if agents else 0.0
+
+
+def get_max_fitness(agents):
+    """
+    Determine the maximum fitness (payoff) among all agents.
+
+    Parameters
+    ----------
+    agents : list of dict
+        List of agents, each with a 'payoff' key.
+
+    Returns
+    -------
+    float
+        The maximum fitness of the agents.
+    """
+    return max(agent["payoff"] for agent in agents) if agents else 0.0

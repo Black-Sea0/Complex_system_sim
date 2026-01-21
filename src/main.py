@@ -39,9 +39,9 @@ def run_simulation(event):
     for _ in range(20):
         moved = step_simulation(N, r, skills, agents, board, p, A)
         update_plot(scatters, agents)
-        print("Simulation step completed")
         if not moved:
             print("No agents moved")
+    print("Simulation: 20 steps completed")
             
 
 # Add the button to trigger a simulation step
