@@ -10,6 +10,7 @@ from algorithm import ComplexOptimizer
 import matplotlib.pyplot as plt
 import numpy as np
 import config
+import statistical
 
 for p in config.p_list:
     alg = ComplexOptimizer(
@@ -20,13 +21,27 @@ for p in config.p_list:
         r=config.r,
         t=config.t,
     )
-    multi_run_data = alg.run_multiple_simulations(num_runs=2, timesteps=20)
+    # multi_run_data = alg.run_multiple_simulations(num_runs=10, timesteps=10)
+    multi_run_data = alg.run_multiple_simulations(
+    num_runs=config.N_runs,
+    timesteps=config.N_steps,
+    reset_initial_state=True
+)
+
+    p_str = f"{p:.2f}"
 
     for i, run_data in enumerate(multi_run_data):
         run_data_avg = np.average(run_data, axis=1)
         plt.plot(run_data_avg, linewidth=1, label=f"Run {i+1}")
-
-    plt.xlabel("Timestep")
-    plt.ylabel("Average value")
-    plt.legend()
-    plt.show()
+        statistical.save_fitness_metrics_timeseries(
+            run_data,
+            csv_filename = f"fitness_metrics_p{p_str}_run{i}.csv",
+            data_folder="data",
+            overwrite=True
+        )
+    # plt.title(f"Average Agent Payoff over Time (p={p})")
+    # plt.xlabel("Timestep")
+    # plt.ylabel("Average value")
+    # plt.legend()
+    # plt.show()
+    print("Done. CSVs saved in ./data")

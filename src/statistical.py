@@ -6,6 +6,8 @@ import pandas as pd
 from scipy.stats import t
 import numpy as np
 
+import config
+
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DATA_PATH = PROJECT_ROOT / "data"
 
@@ -159,6 +161,42 @@ def combine_fitness_metrics(data_folder=DATA_PATH, prefix="fitness_metrics", N=N
     })
 
     # Save to CSV
-    averaged.to_csv(data_path / "averaged_fitness_metrics.csv", index=False)
+    averaged.to_csv(data_path / f"averaged_{prefix}.csv", index=False)
+
 
     return averaged
+
+def save_fitness_metrics_timeseries(run_data, csv_filename="fitness_metrics.csv", data_folder="data", overwrite=True):
+    """
+    Save per-timestep average and max fitness to a CSV.
+
+    Parameters
+    ----------
+    run_data : np.ndarray
+        Array of shape (timesteps, num_agents) containing agent payoffs per timestep.
+    csv_filename : str
+        Output CSV filename.
+    data_folder : str
+        Folder to save CSV into.
+    overwrite : bool
+        If True, overwrite the file. If False, append (only safe if you know what you're doing).
+    """
+    run_data = np.asarray(run_data)
+
+    avg_series = run_data.mean(axis=1)  # (timesteps,)
+    max_series = run_data.max(axis=1)   # (timesteps,)
+
+    data_path = Path(data_folder)
+    data_path.mkdir(parents=True, exist_ok=True)
+    csv_path = data_path / csv_filename
+
+    df = pd.DataFrame({
+        "average_fitness": avg_series,
+        "max_fitness": max_series
+    })
+
+    mode = "w" if overwrite else "a"
+    header = True if overwrite or not csv_path.exists() else False
+    df.to_csv(csv_path, mode=mode, header=header, index=False)
+
+
