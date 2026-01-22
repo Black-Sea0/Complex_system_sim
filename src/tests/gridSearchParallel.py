@@ -1,0 +1,76 @@
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
+from algorithm import ComplexOptimizer
+from landscape import mason_watts_landscape
+import matplotlib.pyplot as plt
+import numpy as np
+from multiprocessing import Pool
+
+def run_simulation_wrapper(args):
+    board, params = args
+    p, t, x, y = params
+    
+    alg = ComplexOptimizer(
+        board=board.copy(),
+        N=100,
+        S=100,
+        A=16,
+        p=p,
+        r=6,
+        t=t,
+    )
+    
+    multi_run_data = alg.run_multiple_simulations(num_runs=25, timesteps=500)
+    
+    run_avgs_at_end = []
+    for run_data in multi_run_data:
+        run_avgs_at_end.append(np.average(run_data, axis=1)[-1])
+    
+    run_avgs_at_end = np.array(run_avgs_at_end)
+    
+    print(f"Completed: p={p:.3f}, t={t:.3f}")
+    
+    return (x, y, np.average(run_avgs_at_end))
+
+
+def main():
+    p_values = np.linspace(0, 1, 11)
+    t_values = np.linspace(0, 1, 11)
+    
+    simulation_results = np.zeros(shape=(len(p_values), len(t_values)))
+    board = mason_watts_landscape(100)
+    
+    params_list = []
+    for x, p in enumerate(p_values):
+        for y, t in enumerate(t_values):
+            params_list.append((board, (p, t, x, y)))
+    
+    print(f"Running {len(params_list)} simulations in parallel...")
+    
+    with Pool(processes=75) as pool: # hard-coded number of threads to use
+        results = pool.map(run_simulation_wrapper, params_list)
+    
+    for x, y, value in results:
+        simulation_results[x, y] = value
+    
+    P, T = np.meshgrid(t_values, p_values)
+
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+
+    surf = ax.plot_surface(P, T, simulation_results, cmap='viridis', alpha=0.8, linewidth=0.5, edgecolor='k')
+    ax.contour(P, T, simulation_results, zdir='z', offset=simulation_results.min() - 0.1, cmap='viridis', alpha=0.5)
+
+    ax.set_xlabel('t')
+    ax.set_ylabel('p')
+    ax.set_zlabel('Average Performance at t=500')
+
+    fig.colorbar(surf, ax=ax)
+    ax.grid(True, alpha=0.3)
+    plt.tight_layout()
+    plt.show()
+
+if __name__ == "__main__":
+    main()
