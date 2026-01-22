@@ -30,7 +30,4 @@ for p in config.p_list:
         run_data_avg = np.average(run_data, axis=1)
         plt.plot(run_data_avg, linewidth=1, label=f"Run {i+1}")
 
-    plt.xlabel("Timestep")
-    plt.ylabel("Average value")
-    plt.legend()
     plt.show()
