@@ -7,12 +7,16 @@
 
 
 from algorithm import ComplexOptimizer
+from landscape import mason_watts_landscape
+
 import matplotlib.pyplot as plt
 import numpy as np
 import config
 
 for p in config.p_list:
+    board = mason_watts_landscape(config.N)
     alg = ComplexOptimizer(
+        board=board,
         N=config.N,
         S=config.S,
         A=config.A,

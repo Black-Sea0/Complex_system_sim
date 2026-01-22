@@ -9,7 +9,8 @@ import matplotlib.pyplot as plt
 from matplotlib.widgets import Button
 
 class ComplexOptimizer:
-    def __init__(self, N, S, A, p, r, t):
+    def __init__(self, board, N, S, A, p, r, t):
+        self.board = board
         self.N = N
         self.S = S
         self.A = A
@@ -17,9 +18,7 @@ class ComplexOptimizer:
         self.r = r
         self.t = t
 
-    def interactive_simulation(self, reset_initial_state = False):
-        if reset_initial_state:
-            self.board = mason_watts_landscape(self.N)
+    def interactive_simulation(self):
 
         self.skills = create_skill_map(self.N, self.S)
         self.agents = initialize_agents(self.board, self.A, self.N, self.S)
@@ -38,10 +37,7 @@ class ComplexOptimizer:
         button.on_clicked(on_click)
         plt.show()
 
-    def run_simulation(self, timesteps = 20, reset_initial_state = False):
-        if reset_initial_state:
-            self.board = mason_watts_landscape(self.N)
-
+    def run_simulation(self, timesteps = 20):
         self.skills = create_skill_map(self.N, self.S)
         self.agents = initialize_agents(self.board, self.A, self.N, self.S)
 
@@ -55,11 +51,11 @@ class ComplexOptimizer:
 
         return data
 
-    def run_multiple_simulations(self, num_runs, timesteps = 20, reset_initial_state = False):
+    def run_multiple_simulations(self, num_runs, timesteps = 20):
         data = []
 
         for i in range(num_runs):
-            data.append(self.run_simulation(timesteps, reset_initial_state))
+            data.append(self.run_simulation(timesteps))
 
         return data
 
