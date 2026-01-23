@@ -9,17 +9,15 @@ import matplotlib.pyplot as plt
 
 import numpy as np
 
-p_values = np.linspace(0, 1, 10)
-t_values = np.linspace(0, 1, 10)
+p_values = np.linspace(0, 1, 2)
+t_values = np.linspace(0, 1, 2)
 
 simulation_results = np.zeros(shape=(len(p_values), len(t_values)))
-board = mason_watts_landscape(100)
 
 for x, p in enumerate(p_values):
     for y, t in enumerate(t_values):
 
         alg = ComplexOptimizer(
-            board=board,
             N=100,
             S=100,
             A=16,
@@ -28,7 +26,7 @@ for x, p in enumerate(p_values):
             t=t,
         )
 
-        multi_run_data = alg.run_multiple_simulations(num_runs=25, timesteps=20)
+        multi_run_data = alg.run_multiple_simulations(num_runs=2, timesteps=20)
 
         run_avgs_at_end = []
         for run_data in multi_run_data:
@@ -36,7 +34,7 @@ for x, p in enumerate(p_values):
         
         run_avgs_at_end = np.array(run_avgs_at_end)
         simulation_results[x, y] = np.average(run_avgs_at_end)
-    
+        
         print(len(t_values) * x + y + 1, ":", len(t_values) * len(p_values))
 
 
