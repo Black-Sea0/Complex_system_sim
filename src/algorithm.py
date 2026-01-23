@@ -54,7 +54,7 @@ class ComplexOptimizer:
         data = np.zeros(shape=(timesteps, self.A))
 
         for i in range(timesteps):
-            self.step_simulation(index=index)
+            self.step_simulation(index=i)
             self.agents = replace_agents(self.agents, self.board, self.A, self.N, self.S, self.t)
             
             data[i] = [agent['payoff'] for agent in self.agents]
