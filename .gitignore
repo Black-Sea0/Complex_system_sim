@@ -1,11 +1,9 @@
 *.venv
+.DS_Store
 
-src/__pycache__/
-__pycache__/
+**/__pycache__/
 *.pyc
 *.pyo
 *.pyd
 
-__pycache__/
-*.pyc
-data/
+data/*

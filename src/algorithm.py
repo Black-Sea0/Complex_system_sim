@@ -10,7 +10,8 @@ from matplotlib.widgets import Button
 import config
 
 class ComplexOptimizer:
-    def __init__(self, N, S, A, p, r, t):
+    def __init__(self, board, N, S, A, p, r, t):
+        self.board = board
         self.N = N
         self.S = S
         self.A = A
@@ -21,13 +22,15 @@ class ComplexOptimizer:
         self.generate_initial_state()
 
     def generate_initial_state(self):
+        """
+        are we using it ?
+        """
         self.board = mason_watts_landscape(self.N) # TODO add the settings for noise octaves, persistence etc...
+        
+    def interactive_simulation(self):
+
         self.skills = create_skill_map(self.N, self.S)
         self.agents = initialize_agents(self.board, self.A, self.N, self.S)
-
-    def interactive_simulation(self, reset_initial_state = False):
-        if reset_initial_state:
-            self.generate_initial_state()
 
         fig, ax, scatters = setup_plot(self.board, self.agents)
 
@@ -42,10 +45,11 @@ class ComplexOptimizer:
         button = Button(plt.axes([0.4, 0.1, 0.2, 0.05]), "Next Step")
         button.on_clicked(on_click)
         plt.show()
+            
+    def run_simulation(self,  timesteps = config.N_steps):
+        self.skills = create_skill_map(self.N, self.S)
+        self.agents = initialize_agents(self.board, self.A, self.N, self.S)
 
-    def run_simulation(self, timesteps = config.N_steps, reset_initial_state = False):
-        if reset_initial_state:
-            self.generate_initial_state()
         data = np.zeros(shape=(timesteps, self.A))
 
         for i in range(timesteps):
@@ -60,7 +64,7 @@ class ComplexOptimizer:
         data = []
 
         for i in range(num_runs):
-            data.append(self.run_simulation(timesteps, reset_initial_state))
+            data.append(self.run_simulation(timesteps))
 
         return data
 

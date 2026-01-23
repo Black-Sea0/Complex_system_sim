@@ -14,6 +14,5 @@ t = 0.0
 NOISE_OCTAVES = 5
 NOISE_PERSISTENCE = 2
 NOISE_LACUNARITY = 2
-
 N_steps = 20  # Number of simulation steps to run
 N_runs = 100 # Number of runs of simulation
