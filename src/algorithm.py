@@ -52,6 +52,9 @@ class ComplexOptimizer:
             
             data[i] = [agent['payoff'] for agent in self.agents]
 
+        # Save final step
+        save_fitness_metrics(agents=self.agents, csv_filename=f"fitness_metrics_p_{self.p}_{index}.csv")
+
         return data
 
     def run_multiple_simulations(self, num_runs, timesteps = config.N_steps, reset_initial_state = False):
@@ -62,7 +65,7 @@ class ComplexOptimizer:
 
         return data
 
-    def step_simulation(self, index) -> bool:
+    def step_simulation(self, index, save_every_step: bool=False) -> bool:
         """
         Perform a single simulation step for all agents in the environment.
 
@@ -144,5 +147,7 @@ class ComplexOptimizer:
                 self.agent['payoff'] = best_payoff
                 moved_any = True
 
-        save_fitness_metrics(agents=self.agents, csv_filename=f"fitness_metrics_p_{self.p}_{index}.csv")
+        if save_every_step:
+            save_fitness_metrics(agents=self.agents, csv_filename=f"fitness_metrics_p_{self.p}_{index}.csv")
+
         return moved_any
