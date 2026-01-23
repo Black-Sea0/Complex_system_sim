@@ -111,8 +111,6 @@ def create_fitness_plot(csv_filename="averaged_fitness_metrics.csv", data_folder
     plt.show()
 
 if __name__ == "__main__":
-        # Example usage: create a plot of average payoff vs collaboration probability p
-
     DATA_FOLDER = Path("data")
     N_STEPS = config.N_steps      
     CI = 0.95
