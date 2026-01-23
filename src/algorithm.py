@@ -39,7 +39,7 @@ class ComplexOptimizer:
         button.on_clicked(on_click)
         plt.show()
             
-    def run_simulation(self,  timesteps = config.N_steps):
+    def run_simulation(self, index, timesteps = config.N_steps):
         self.board = mason_watts_landscape(self.N)
         self.skills = create_skill_map(self.N, self.S)
         self.agents = initialize_agents(self.board, self.A, self.N, self.S)
