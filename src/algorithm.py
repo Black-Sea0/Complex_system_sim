@@ -7,6 +7,7 @@ from landscape import get_skill_cells
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button
+import config
 
 class ComplexOptimizer:
     def __init__(self, board, N, S, A, p, r, t):
@@ -18,6 +19,14 @@ class ComplexOptimizer:
         self.r = r
         self.t = t
 
+        self.generate_initial_state()
+
+    def generate_initial_state(self):
+        """
+        are we using it ?
+        """
+        self.board = mason_watts_landscape(self.N) # TODO add the settings for noise octaves, persistence etc...
+        
     def interactive_simulation(self):
 
         self.skills = create_skill_map(self.N, self.S)
@@ -36,8 +45,8 @@ class ComplexOptimizer:
         button = Button(plt.axes([0.4, 0.1, 0.2, 0.05]), "Next Step")
         button.on_clicked(on_click)
         plt.show()
-
-    def run_simulation(self, timesteps = 20):
+            
+    def run_simulation(self,  timesteps = config.N_steps):
         self.skills = create_skill_map(self.N, self.S)
         self.agents = initialize_agents(self.board, self.A, self.N, self.S)
 
@@ -51,7 +60,7 @@ class ComplexOptimizer:
 
         return data
 
-    def run_multiple_simulations(self, num_runs, timesteps = 20):
+    def run_multiple_simulations(self, num_runs, timesteps = config.N_steps, reset_initial_state = False):
         data = []
 
         for i in range(num_runs):
