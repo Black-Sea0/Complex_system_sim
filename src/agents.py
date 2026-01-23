@@ -89,7 +89,6 @@ def replace_agents(agents, board_values, A, N, S, t):
             agent['pos'] = pos
             agent['skill'] = skill
             agent['payoff'] = board_values[pos[0], pos[1]]
-            print(f'agent {agent_idx} was replaced')
     return agents
 
 def get_adjacent_cells(N, pos):
