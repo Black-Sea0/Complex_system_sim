@@ -3,6 +3,7 @@ from agents import initialize_agents, replace_agents
 from visualisation import setup_plot, update_plot
 from agents import get_adjacent_cells
 from landscape import get_skill_cells
+from statistical import save_fitness_metrics
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -53,7 +54,7 @@ class ComplexOptimizer:
         data = np.zeros(shape=(timesteps, self.A))
 
         for i in range(timesteps):
-            self.step_simulation()
+            self.step_simulation(index=index)
             self.agents = replace_agents(self.agents, self.board, self.A, self.N, self.S, self.t)
             
             data[i] = [agent['payoff'] for agent in self.agents]
@@ -64,11 +65,11 @@ class ComplexOptimizer:
         data = []
 
         for i in range(num_runs):
-            data.append(self.run_simulation(timesteps))
+            data.append(self.run_simulation(index=i, timesteps=timesteps))
 
         return data
 
-    def step_simulation(self) -> bool:
+    def step_simulation(self, index) -> bool:
         """
         Perform a single simulation step for all agents in the environment.
 
@@ -150,4 +151,5 @@ class ComplexOptimizer:
                 self.agent['payoff'] = best_payoff
                 moved_any = True
 
+        save_fitness_metrics(agents=self.agents, csv_filename=f"fitness_metrics_p_{self.p}_{index}.csv")
         return moved_any

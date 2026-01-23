@@ -91,7 +91,7 @@ def save_fitness_metrics(agents, csv_filename="fitness_metrics.csv", data_folder
         })
 
 
-def combine_fitness_metrics(data_folder=DATA_PATH, prefix="fitness_metrics", N=None, ci=0.95):
+def combine_fitness_metrics(data_folder=DATA_PATH, prefix="fitness_metrics", output_file_name="averaged_fitness_metrics.csv", N=None, ci=0.95):
     """
     Load all fitness metric CSV files with a given prefix, compute the
     mean and confidence intervals for average and max fitness per simulation step,
