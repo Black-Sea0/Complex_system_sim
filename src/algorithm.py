@@ -11,25 +11,17 @@ from matplotlib.widgets import Button
 import config
 
 class ComplexOptimizer:
-    def __init__(self, board, N, S, A, p, r, t):
-        self.board = board
+    def __init__(self, N, S, A, p, r, t):
         self.N = N
         self.S = S
         self.A = A
         self.p = p
         self.r = r
         self.t = t
-
-        self.generate_initial_state()
-
-    def generate_initial_state(self):
-        """
-        are we using it ?
-        """
-        self.board = mason_watts_landscape(self.N) # TODO add the settings for noise octaves, persistence etc...
         
     def interactive_simulation(self):
 
+        self.board = mason_watts_landscape(self.N)
         self.skills = create_skill_map(self.N, self.S)
         self.agents = initialize_agents(self.board, self.A, self.N, self.S)
 
@@ -48,6 +40,7 @@ class ComplexOptimizer:
         plt.show()
             
     def run_simulation(self,  timesteps = config.N_steps):
+        self.board = mason_watts_landscape(self.N)
         self.skills = create_skill_map(self.N, self.S)
         self.agents = initialize_agents(self.board, self.A, self.N, self.S)
 
