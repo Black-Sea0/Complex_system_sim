@@ -1,5 +1,6 @@
 import sys
 import os
+import time
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 from algorithm import ComplexOptimizer
@@ -9,11 +10,11 @@ import numpy as np
 from multiprocessing import Pool
 
 def run_simulation_wrapper(args):
-    board, params = args
-    p, t, x, y = params
+    p, t, x, y = args
+
+    start_time = time.time()
     
     alg = ComplexOptimizer(
-        board=board.copy(),
         N=100,
         S=100,
         A=16,
@@ -22,7 +23,7 @@ def run_simulation_wrapper(args):
         t=t,
     )
     
-    multi_run_data = alg.run_multiple_simulations(num_runs=25, timesteps=500)
+    multi_run_data = alg.run_multiple_simulations(num_runs=1000, timesteps=20)
     
     run_avgs_at_end = []
     for run_data in multi_run_data:
@@ -30,31 +31,38 @@ def run_simulation_wrapper(args):
     
     run_avgs_at_end = np.array(run_avgs_at_end)
     
-    print(f"Completed: p={p:.3f}, t={t:.3f}")
+    elapsed_time = time.time() - start_time
+    print(f"Completed: p={p:.2f}, t={t:.2f} in {elapsed_time:.1f} seconds")
     
     return (x, y, np.average(run_avgs_at_end))
 
 
 def main():
-    p_values = np.linspace(0, 1, 11)
-    t_values = np.linspace(0, 1, 11)
+    start_time = time.time()
+
+    p_values = np.linspace(0, 1, 31)
+    t_values = np.linspace(0, 0.3, 11)
     
     simulation_results = np.zeros(shape=(len(p_values), len(t_values)))
-    board = mason_watts_landscape(100)
-    
     params_list = []
     for x, p in enumerate(p_values):
         for y, t in enumerate(t_values):
-            params_list.append((board, (p, t, x, y)))
+            params_list.append((p, t, x, y))
     
     print(f"Running {len(params_list)} simulations in parallel...")
     
     with Pool(processes=75) as pool: # hard-coded number of threads to use
         results = pool.map(run_simulation_wrapper, params_list)
     
+    elapsed_time = time.time() - start_time
+    print(f"Simulations finished in {elapsed_time:.1f} seconds")
+
     for x, y, value in results:
         simulation_results[x, y] = value
     
+    print("Saving results!")
+    np.save("grid_search_results.npy", simulation_results)
+
     P, T = np.meshgrid(t_values, p_values)
 
     fig = plt.figure()

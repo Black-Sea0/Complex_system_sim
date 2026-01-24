@@ -39,7 +39,7 @@ class ComplexOptimizer:
         button.on_clicked(on_click)
         plt.show()
             
-    def run_simulation(self, index, timesteps = config.N_steps):
+    def run_simulation(self, index, timesteps = config.N_steps, save_metrics = False):
         self.board = mason_watts_landscape(self.N)
         self.skills = create_skill_map(self.N, self.S)
         self.agents = initialize_agents(self.board, self.A, self.N, self.S)
@@ -47,13 +47,14 @@ class ComplexOptimizer:
         data = np.zeros(shape=(timesteps, self.A))
 
         for i in range(timesteps):
-            self.step_simulation(index=i)
+            self.step_simulation(index=i, save_every_step=save_metrics)
             self.agents = replace_agents(self.agents, self.board, self.A, self.N, self.S, self.t)
             
             data[i] = [agent['payoff'] for agent in self.agents]
 
         # Save final step
-        save_fitness_metrics(agents=self.agents, csv_filename=f"fitness_metrics_p_{self.p}_{index}.csv")
+        if (save_metrics):
+            save_fitness_metrics(agents=self.agents, csv_filename=f"fitness_metrics_p_{self.p}_{index}.csv")
 
         return data
 
