@@ -58,7 +58,7 @@ class ComplexOptimizer:
 
         return data
 
-    def run_multiple_simulations(self, num_runs, timesteps = config.N_steps, reset_initial_state = False):
+    def run_multiple_simulations(self, num_runs, timesteps = config.N_steps):
         data = []
 
         for i in range(num_runs):
@@ -103,10 +103,10 @@ class ComplexOptimizer:
         
         agent_order = np.random.permutation(self.A)
         for agent_idx in agent_order:
-            self.agent = self.agents[agent_idx]
-            current_pos = self.agent['pos']
-            current_skill = self.agent['skill']
-            current_payoff = self.agent['payoff']
+            agent = self.agents[agent_idx]
+            current_pos = agent['pos']
+            current_skill = agent['skill']
+            current_payoff = agent['payoff']
 
             candidate_cells = []
 
@@ -144,8 +144,8 @@ class ComplexOptimizer:
 
             # Move only if payoff improves
             if best_payoff > current_payoff:
-                self.agent['pos'] = best_pos
-                self.agent['payoff'] = best_payoff
+                self.agents[agent_idx]['pos'] = best_pos
+                self.agents[agent_idx]['payoff'] = best_payoff
                 moved_any = True
 
         if save_every_step:

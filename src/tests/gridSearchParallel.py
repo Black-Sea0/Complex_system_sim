@@ -41,7 +41,7 @@ def main():
     start_time = time.time()
 
     p_values = np.linspace(0, 1, 31)
-    t_values = np.linspace(0, 0.3, 11)
+    t_values = np.linspace(0, 1, 31)
     
     simulation_results = np.zeros(shape=(len(p_values), len(t_values)))
     params_list = []

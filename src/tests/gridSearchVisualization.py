@@ -10,7 +10,7 @@ import sys
 simulation_results = np.load(sys.argv[1])
 
 p_values = np.linspace(0, 1, simulation_results.shape[0])
-t_values = np.linspace(0, 0.3, simulation_results.shape[1])
+t_values = np.linspace(0, 1, simulation_results.shape[1])
 
 optimal_p_indices = np.argmax(simulation_results, axis=0)
 optimal_p = p_values[optimal_p_indices]
