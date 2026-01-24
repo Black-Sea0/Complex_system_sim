@@ -91,33 +91,6 @@ def replace_agents(agents, board_values, A, N, S, t):
             agent['payoff'] = board_values[pos[0], pos[1]]
     return agents
 
-def get_adjacent_cells(N, pos):
-    """
-    Return all valid adjacent cells (Moore neighborhood)
-    around a given position.
-
-    Parameters
-    ----------
-    pos : array-like
-        Current position [i, j] of the agent.
-    N : int
-        Size of one dimension of the square grid.
-
-    Returns
-    -------
-    np.ndarray
-        Array of neighboring cell coordinates.
-    """
-    cells = []
-    for di in [-1, 0, 1]:
-        for dj in [-1, 0, 1]:
-            if di == 0 and dj == 0:
-                continue  # Skip the agent's own cell
-            ni, nj = pos[0] + di, pos[1] + dj
-            if 0 <= ni < N and 0 <= nj < N:
-                cells.append([ni, nj])
-    return np.array(cells)
-
 def get_average_fitness(agents):
     """
     Calculate the average fitness (payoff) of all agents.

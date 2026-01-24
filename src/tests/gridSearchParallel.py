@@ -3,8 +3,7 @@ import os
 import time
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
-from algorithm import ComplexOptimizer
-from landscape import mason_watts_landscape
+from algorithm import run_multiple_simulations
 import matplotlib.pyplot as plt
 import numpy as np
 from multiprocessing import Pool
@@ -13,17 +12,17 @@ def run_simulation_wrapper(args):
     p, t, x, y = args
 
     start_time = time.time()
-    
-    alg = ComplexOptimizer(
+
+    multi_run_data = run_multiple_simulations(
         N=100,
         S=100,
         A=16,
         p=p,
         r=6,
         t=t,
+        num_runs=10,
+        timesteps=20
     )
-    
-    multi_run_data = alg.run_multiple_simulations(num_runs=1000, timesteps=20)
     
     run_avgs_at_end = []
     for run_data in multi_run_data:
