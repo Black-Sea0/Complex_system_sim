@@ -2,24 +2,6 @@ from landscape import mason_watts_landscape, create_skill_map, get_skill_cells, 
 from agents import initialize_agents, replace_agents
 import numpy as np
 
-def run_simulation(N, S, A, p, r, t, timesteps):
-    """Run a complete simulation."""
-    # Initialize fresh state for each run
-    board = mason_watts_landscape(N)
-    skills = create_skill_map(N, S)
-    agents = initialize_agents(board, A, N, S)
-    
-    payoffs_history = np.zeros((timesteps, A))
-    
-    for i in range(timesteps):
-        agents = step_simulation(board, skills, agents, N, S, A, p, r)
-        agents = replace_agents(agents, board, A, N, S, t)
-        
-        # record payoffs
-        payoffs_history[i] = [agent['payoff'] for agent in agents]
-    
-    return payoffs_history
-
 def step_simulation(board, skills, agents, N, S, A, p, r):
     """Perform one simulation step for all agents."""
     agent_order = np.random.permutation(A)
@@ -67,6 +49,24 @@ def step_simulation(board, skills, agents, N, S, A, p, r):
                 agents[agent_idx]['payoff'] = best_payoff
     
     return agents
+
+def run_simulation(N, S, A, p, r, t, timesteps):
+    """Run a complete simulation."""
+    # Initialize fresh state for each run
+    board = mason_watts_landscape(N)
+    skills = create_skill_map(N, S)
+    agents = initialize_agents(board, A, N, S)
+    
+    payoffs_history = np.zeros((timesteps, A))
+    
+    for i in range(timesteps):
+        agents = step_simulation(board, skills, agents, N, S, A, p, r)
+        agents = replace_agents(agents, board, A, N, S, t)
+        
+        # record payoffs
+        payoffs_history[i] = [agent['payoff'] for agent in agents]
+    
+    return payoffs_history
 
 def run_multiple_simulations(N, S, A, p, r, t, num_runs, timesteps):
     """Run multiple simulations with same parameters."""

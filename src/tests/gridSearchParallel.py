@@ -6,6 +6,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from algorithm import run_multiple_simulations
 import matplotlib.pyplot as plt
 import numpy as np
+import gc
 from multiprocessing import Pool
 
 def run_simulation_wrapper(args):
@@ -20,8 +21,8 @@ def run_simulation_wrapper(args):
         p=p,
         r=6,
         t=t,
-        num_runs=10,
-        timesteps=20
+        num_runs=1000,
+        timesteps=60
     )
     
     run_avgs_at_end = []
@@ -31,6 +32,7 @@ def run_simulation_wrapper(args):
     run_avgs_at_end = np.array(run_avgs_at_end)
     
     elapsed_time = time.time() - start_time
+    
     print(f"Completed: p={p:.2f}, t={t:.2f} in {elapsed_time:.1f} seconds")
     
     return (x, y, np.average(run_avgs_at_end))
@@ -50,7 +52,7 @@ def main():
     
     print(f"Running {len(params_list)} simulations in parallel...")
     
-    with Pool(processes=75) as pool: # hard-coded number of threads to use
+    with Pool(processes=75, maxtasksperchild=1) as pool: # hard-coded number of threads to use
         results = pool.map(run_simulation_wrapper, params_list)
     
     elapsed_time = time.time() - start_time
