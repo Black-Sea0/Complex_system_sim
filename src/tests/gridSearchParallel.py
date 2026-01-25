@@ -64,22 +64,5 @@ def main():
     print("Saving results!")
     np.save("grid_search_results.npy", simulation_results)
 
-    P, T = np.meshgrid(t_values, p_values)
-
-    fig = plt.figure()
-    ax = fig.add_subplot(111, projection='3d')
-
-    surf = ax.plot_surface(P, T, simulation_results, cmap='viridis', alpha=0.8, linewidth=0.5, edgecolor='k')
-    ax.contour(P, T, simulation_results, zdir='z', offset=simulation_results.min() - 0.1, cmap='viridis', alpha=0.5)
-
-    ax.set_xlabel('t')
-    ax.set_ylabel('p')
-    ax.set_zlabel('Average Performance at t=500')
-
-    fig.colorbar(surf, ax=ax)
-    ax.grid(True, alpha=0.3)
-    plt.tight_layout()
-    plt.show()
-
 if __name__ == "__main__":
     main()
