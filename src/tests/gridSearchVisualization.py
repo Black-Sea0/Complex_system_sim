@@ -11,6 +11,7 @@ from algorithm import run_simulation
 # Run this file to visualize the results from a gridSearchParallel simulation
 # Set the p_value and t_value range as used in the simulation, then run this file using for example:
 # 'python gridSearchVisualization.py grid_search_results_1000_samples_high_res.npy'
+# python gridSearchVisualization.py grid_search_results_1000_samples_high_res_20_steps.npy
 
 simulation_results = np.load(sys.argv[1])
 

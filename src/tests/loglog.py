@@ -2,7 +2,6 @@ import sys
 import os
 import time
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-
 from algorithm import run_simulation
 import matplotlib.pyplot as plt
 import numpy as np
