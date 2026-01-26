@@ -52,7 +52,7 @@ def step_simulation(board, skills, agents, N, S, A, p, r):
     
     return agents
 
-def run_simulation(N, S, A, p, r, t, timesteps, save_to_csv: bool = True):
+def run_simulation(N, S, A, p, r, t, timesteps, save_to_csv: bool = False):
     """Run a complete simulation."""
     board = mason_watts_landscape(N)
     skills = create_skill_map(N, S)
