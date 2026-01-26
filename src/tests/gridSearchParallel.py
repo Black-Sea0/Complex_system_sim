@@ -4,9 +4,7 @@ import time
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 from algorithm import run_multiple_simulations
-import matplotlib.pyplot as plt
 import numpy as np
-import gc
 from multiprocessing import Pool
 
 def run_simulation_wrapper(args):
