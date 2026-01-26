@@ -52,30 +52,32 @@ def step_simulation(board, skills, agents, N, S, A, p, r):
     
     return agents
 
-def run_simulation(N, S, A, p, r, t, timesteps):
+def run_simulation(N, S, A, p, r, t, timesteps, save_to_csv: bool = False):
     """Run a complete simulation."""
     board = mason_watts_landscape(N)
     skills = create_skill_map(N, S)
     agents = initialize_agents(board, A, N, S)
     
     payoffs_history = np.zeros((timesteps, A))
-    csv_path = "avg_vs_time.csv"
 
-    file_exists = os.path.isfile(csv_path)
-    with open(csv_path, mode="a", newline="") as f:
-        writer = csv.writer(f)
-        if not file_exists:
-            writer.writerow(["timestep", "avg_payoff"])
+    # save to csv
+    if save_to_csv:
+        csv_path = "avg_vs_time.csv"
+        file_exists = os.path.isfile(csv_path)
+        with open(csv_path, mode="a", newline="") as f:
+            writer = csv.writer(f)
+            if not file_exists:
+                writer.writerow(["timestep", "avg_payoff"])
 
-        for i in range(timesteps):
-            agents = step_simulation(board, skills, agents, N, S, A, p, r)
-            agents = replace_agents(agents, board, A, N, S, t)
+            for i in range(timesteps):
+                agents = step_simulation(board, skills, agents, N, S, A, p, r)
+                agents = replace_agents(agents, board, A, N, S, t)
 
-            payoffs = [agent["payoff"] for agent in agents]
-            payoffs_history[i] = payoffs
-            avg_payoff = np.mean(payoffs)
+                payoffs = [agent["payoff"] for agent in agents]
+                payoffs_history[i] = payoffs
+                avg_payoff = np.mean(payoffs)
 
-            writer.writerow([i, avg_payoff])
+                writer.writerow([i, avg_payoff])
 
     return payoffs_history
 
