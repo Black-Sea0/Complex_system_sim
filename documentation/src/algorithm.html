@@ -55,11 +55,11 @@ el.replaceWith(d);
 <pre><code class="python">def run_multiple_simulations(N, S, A, p, r, t, num_runs, timesteps):
     &#34;&#34;&#34;Run multiple simulations with same parameters.&#34;&#34;&#34;
     all_results = []
-    
+
     for _ in range(num_runs):
         result = run_simulation(N, S, A, p, r, t, timesteps)
         all_results.append(result)
-    
+
     return all_results</code></pre>
 </details>
 <div class="desc"><p>Run multiple simulations with same parameters.</p></div>
@@ -78,16 +78,16 @@ el.replaceWith(d);
     board = mason_watts_landscape(N)
     skills = create_skill_map(N, S)
     agents = initialize_agents(board, A, N, S)
-    
+
     payoffs_history = np.zeros((timesteps, A))
-    
+
     for i in range(timesteps):
         agents = step_simulation(board, skills, agents, N, S, A, p, r)
         agents = replace_agents(agents, board, A, N, S, t)
-        
+
         # record payoffs
         payoffs_history[i] = [agent[&#39;payoff&#39;] for agent in agents]
-    
+
     return payoffs_history</code></pre>
 </details>
 <div class="desc"><p>Run a complete simulation.</p></div>
@@ -107,19 +107,23 @@ el.replaceWith(d);
     Parameters
     ----------
     board : np.ndarray
-        A 2D array of shape (N, N) representing the fitness landscape
+        A 2D array of shape (N, N) representing the fitness landscape.
     skills : np.ndarray
-        A 2D array of shape (N, N) representing the skill of each cell
+        A 2D array of shape (N, N) representing the skill of each cell.
     agents : list of dicts
-        An array of S dictionaries, each corresponding to an agent with a &#39;pos&#39;, &#39;skill&#39; and &#39;payoff&#39; attribute
+        An array of S dictionaries, each corresponding to
+        an agent with a &#39;pos&#39;, &#39;skill&#39; and &#39;payoff&#39; attribute.
     N : int
-        Size of one dimension of the square grid
+        Size of one dimension of the square grid.
     S : int
-        Number of total possible skills
+        Number of total possible skills.
     A : int
-        Number of agents on the board
-    p : 
-    
+        Number of agents on the board.
+    p : float
+        copy-collaborate ratio.
+    r : float
+        turnover ratio.
+
     Returns
     -------
     np.ndarray
@@ -127,20 +131,20 @@ el.replaceWith(d);
     &#34;&#34;&#34;
     &#34;&#34;&#34;Perform one simulation step for all agents.&#34;&#34;&#34;
     agent_order = np.random.permutation(A)
-    
+
     for agent_idx in agent_order:
         agent = agents[agent_idx]
         current_pos = agent[&#39;pos&#39;]
         current_skill = agent[&#39;skill&#39;]
         current_payoff = agent[&#39;payoff&#39;]
-        
+
         candidate_cells = []
-        
+
         # local neighbourhood
         adjacent = get_adjacent_cells(N, current_pos)
         if len(adjacent) &gt; 0:
             candidate_cells.extend(adjacent)
-        
+
         # skill-based exploration
         skills_to_check = [current_skill]
 
@@ -153,42 +157,51 @@ el.replaceWith(d);
                     candidate_cells.append(agents[neighbor_idx][&#39;pos&#39;])
 
         skills_to_check = np.unique(np.array(skills_to_check))
-        skill_cells = get_skill_cells(skills, current_pos, skills_to_check, r, N)
+        skill_cells = get_skill_cells(
+            skills,
+            current_pos,
+            skills_to_check,
+            r,
+            N
+        )
         if len(skill_cells) &gt; 0:
             candidate_cells.extend(skill_cells)
-        
+
         # find best move
         if candidate_cells:
             candidate_cells = np.unique(np.array(candidate_cells), axis=0)
             payoffs = board[candidate_cells[:, 0], candidate_cells[:, 1]]
             best_idx = np.argmax(payoffs)
             best_payoff = payoffs[best_idx]
-            
+
             # move if improvement
             if best_payoff &gt; current_payoff:
                 best_pos = candidate_cells[best_idx]
                 agents[agent_idx][&#39;pos&#39;] = best_pos
                 agents[agent_idx][&#39;payoff&#39;] = best_payoff
-    
+
     return agents</code></pre>
 </details>
 <div class="desc"><p>Update the simulation by running one step. All agents try to move once.</p>
 <h2 id="parameters">Parameters</h2>
 <dl>
 <dt><strong><code>board</code></strong> :&ensp;<code>np.ndarray</code></dt>
-<dd>A 2D array of shape (N, N) representing the fitness landscape</dd>
+<dd>A 2D array of shape (N, N) representing the fitness landscape.</dd>
 <dt><strong><code>skills</code></strong> :&ensp;<code>np.ndarray</code></dt>
-<dd>A 2D array of shape (N, N) representing the skill of each cell</dd>
+<dd>A 2D array of shape (N, N) representing the skill of each cell.</dd>
 <dt><strong><code>agents</code></strong> :&ensp;<code>list</code> of <code>dicts</code></dt>
-<dd>An array of S dictionaries, each corresponding to an agent with a 'pos', 'skill' and 'payoff' attribute</dd>
+<dd>An array of S dictionaries, each corresponding to
+an agent with a 'pos', 'skill' and 'payoff' attribute.</dd>
 <dt><strong><code>N</code></strong> :&ensp;<code>int</code></dt>
-<dd>Size of one dimension of the square grid</dd>
+<dd>Size of one dimension of the square grid.</dd>
 <dt><strong><code>S</code></strong> :&ensp;<code>int</code></dt>
-<dd>Number of total possible skills</dd>
+<dd>Number of total possible skills.</dd>
 <dt><strong><code>A</code></strong> :&ensp;<code>int</code></dt>
-<dd>Number of agents on the board</dd>
-<dt><strong><code>p</code></strong></dt>
-<dd>&nbsp;</dd>
+<dd>Number of agents on the board.</dd>
+<dt><strong><code>p</code></strong> :&ensp;<code>float</code></dt>
+<dd>copy-collaborate ratio.</dd>
+<dt><strong><code>r</code></strong> :&ensp;<code>float</code></dt>
+<dd>turnover ratio.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <dl>

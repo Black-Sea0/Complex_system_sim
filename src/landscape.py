@@ -6,6 +6,7 @@ import pandas as pd
 from scipy.stats import norm
 from scipy.interpolate import RectBivariateSpline
 
+
 def generate_fitness_landscape(N, oct, pers, lac):
     """
     Generate a two-dimensional fitness landscape with a global optimum.
@@ -42,7 +43,7 @@ def generate_fitness_landscape(N, oct, pers, lac):
         for j in range(N):
             x = i / N
             y = j / N
-            
+
             # Perlin noise component (ruggedness)
             board_values[i, j] = pnoise2(
                 x, y,
@@ -50,9 +51,9 @@ def generate_fitness_landscape(N, oct, pers, lac):
                 persistence=pers,
                 lacunarity=lac
             )
-            
+
             # Gaussian signal to enforce a global optimum
-            signal = np.exp(-((i - N // 2) ** 2 + (j - N // 2) ** 2) / (2 * 3 ** 2))
+            signal = np.exp(-((i - N // 2)**2 + (j - N // 2)**2) / (2*3**2))
             board_values[i, j] += signal
 
     # Rescale fitness values to [0, 1]
@@ -61,9 +62,11 @@ def generate_fitness_landscape(N, oct, pers, lac):
     board_values = (board_values - min_val) / (max_val - min_val)
     return board_values
 
+
 def create_skill_map(N, S):
-    """ 
-    Generates the skill attribute for each cell in the map, given the number of allowed unique skills.
+    """
+    Generates the skill attribute for each cell in the map,
+     given the number of allowed unique skills.
 
     Parameters
     ----------
@@ -75,9 +78,11 @@ def create_skill_map(N, S):
     Returns
     -------
     np.ndarray
-        A 2D array of shape (N, N) representing the skill value of each cell in the map.
+        A 2D array of shape (N, N) representing the skill
+         value of each cell in the map.
     """
     return np.random.randint(0, S, (N, N))
+
 
 def get_adjacent_cells(N, pos):
     """
@@ -99,12 +104,13 @@ def get_adjacent_cells(N, pos):
     i, j = pos
     di = np.array([-1, -1, -1, 0, 0, 1, 1, 1])
     dj = np.array([-1, 0, 1, -1, 1, -1, 0, 1])
-    
+
     ni = i + di
     nj = j + dj
     mask = (ni >= 0) & (ni < N) & (nj >= 0) & (nj < N)
-    
+
     return np.column_stack((ni[mask], nj[mask]))
+
 
 def get_skill_cells(board_skills, pos, skills, r, N):
     """
@@ -117,7 +123,8 @@ def get_skill_cells(board_skills, pos, skills, r, N):
     Parameters
     ----------
     board_skills : np.ndarray
-        A 2D array of shape (N, N) assigning a skill identifier to each grid cell.
+        A 2D array of shape (N, N) assigning a skill identifier to
+         each grid cell.
     pos : array-like
         Current position [i, j] of the agent on the grid.
     skills : np.ndarray
@@ -132,7 +139,8 @@ def get_skill_cells(board_skills, pos, skills, r, N):
     np.ndarray
         An array of grid coordinates (shape: [k, 2]) corresponding to all
         cells within radius r of the agent's position whose skill matches
-        the specified skill. If no such cells exist, an empty array is returned.
+        the specified skill.
+        If no such cells exist, an empty array is returned.
     """
     i, j = pos
     di_range = np.arange(-r, r + 1)
@@ -153,17 +161,25 @@ def get_skill_cells(board_skills, pos, skills, r, N):
 
     skill_values = board_skills[ni, nj]
     skill_match = np.isin(skill_values, skills)
-    
+
     return np.column_stack((ni[skill_match], nj[skill_match]))
 
-def mason_watts_landscape(L, seed=None, rho=0.7, omega_min=3, omega_max=7, center_mean=False):
+
+def mason_watts_landscape(
+    L,
+    seed=None,
+    rho=0.7,
+    omega_min=3,
+    omega_max=7,
+    center_mean=False
+):
     """
     Generate a 2D fitness landscape inspired by Mason & Watts (R version).
 
-    The landscape combines a dominant unimodal Gaussian peak with 
-    multi-scale smooth noise (Perlin-like) to create a discrete NxN grid 
-    that is locally correlated and visually smooth. This is intended to 
-    simulate complex problem spaces where neighboring solutions have 
+    The landscape combines a dominant unimodal Gaussian peak with
+    multi-scale smooth noise (Perlin-like) to create a discrete NxN grid
+    that is locally correlated and visually smooth. This is intended to
+    simulate complex problem spaces where neighboring solutions have
     similar fitness values, but with some local variation.
 
     Parameters
@@ -174,7 +190,8 @@ def mason_watts_landscape(L, seed=None, rho=0.7, omega_min=3, omega_max=7, cente
         Seed for the random number generator (default: None).
     rho : float, optional
         Scaling factor for the amplitude of successive noise octaves
-        (default: 0.7). Lower values reduce the contribution of higher-frequency noise.
+        (default: 0.7).
+        Lower values reduce the contribution of higher-frequency noise.
     omega_min : int, optional
         Minimum octave index for generating smooth noise (default: 3).
     omega_max : int, optional
@@ -220,7 +237,13 @@ def mason_watts_landscape(L, seed=None, rho=0.7, omega_min=3, omega_max=7, cente
         coarse = rng.uniform(0.0, 1.0, size=(octave, octave))
         coarse_seq = np.linspace(1, L, num=octave)
 
-        spline = RectBivariateSpline(coarse_seq, coarse_seq, coarse, kx=3, ky=3)
+        spline = RectBivariateSpline(
+            coarse_seq,
+            coarse_seq,
+            coarse,
+            kx=3,
+            ky=3
+        )
         octave_full = spline(fine, fine)  # (L, L)
 
         octave_full *= (rho ** omega)

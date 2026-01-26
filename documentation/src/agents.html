@@ -156,7 +156,7 @@ el.replaceWith(d);
         - &#39;payoff&#39; : float
             The fitness value at the agent&#39;s current position.
     &#34;&#34;&#34;
-        
+
     agents = []
     for _ in range(A):
         pos = np.random.randint(0, N, 2)
@@ -208,7 +208,7 @@ The fitness value at the agent's current position.</dd>
     &#34;&#34;&#34;
     Return a new list of agents with the &#39;dead&#39; agents replaced.
 
-    Each new agent old agent is replaced with a new one that is randomly 
+    Each new agent old agent is replaced with a new one that is randomly
     assigned a position and skill.
 
     Parameters
@@ -224,8 +224,9 @@ The fitness value at the agent's current position.</dd>
     S : int
         Total number of distinct skills.
     t : float
-        A float from 0, 1 to represent the chance of each agent having turnover.
-        
+        A float from 0, 1 to represent the chance of
+        each agent having turnover.
+
     Returns
     -------
     list of dict
@@ -263,7 +264,8 @@ assigned a position and skill.</p>
 <dt><strong><code>S</code></strong> :&ensp;<code>int</code></dt>
 <dd>Total number of distinct skills.</dd>
 <dt><strong><code>t</code></strong> :&ensp;<code>float</code></dt>
-<dd>A float from 0, 1 to represent the chance of each agent having turnover.</dd>
+<dd>A float from 0, 1 to represent the chance of
+each agent having turnover.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <dl>

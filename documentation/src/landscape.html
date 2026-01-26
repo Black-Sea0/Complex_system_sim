@@ -53,12 +53,40 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def create_skill_map(N, S):
-    &#34;&#34;&#34; 
-    Assign a random skill to each cell on the grid.
+    &#34;&#34;&#34;
+    Generates the skill attribute for each cell in the map,
+     given the number of allowed unique skills.
+
+    Parameters
+    ----------
+    N : int
+        Size of one dimension of the square grid.
+    S : int
+        Number of possible unique skills.
+
+    Returns
+    -------
+    np.ndarray
+        A 2D array of shape (N, N) representing the skill
+         value of each cell in the map.
     &#34;&#34;&#34;
     return np.random.randint(0, S, (N, N))</code></pre>
 </details>
-<div class="desc"><p>Assign a random skill to each cell on the grid.</p></div>
+<div class="desc"><p>Generates the skill attribute for each cell in the map,
+given the number of allowed unique skills.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>N</code></strong> :&ensp;<code>int</code></dt>
+<dd>Size of one dimension of the square grid.</dd>
+<dt><strong><code>S</code></strong> :&ensp;<code>int</code></dt>
+<dd>Number of possible unique skills.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>np.ndarray</code></dt>
+<dd>A 2D array of shape (N, N) representing the skill
+value of each cell in the map.</dd>
+</dl></div>
 </dd>
 <dt id="src.landscape.generate_fitness_landscape"><code class="name flex">
 <span>def <span class="ident">generate_fitness_landscape</span></span>(<span>N, oct, pers, lac)</span>
@@ -104,7 +132,7 @@ el.replaceWith(d);
         for j in range(N):
             x = i / N
             y = j / N
-            
+
             # Perlin noise component (ruggedness)
             board_values[i, j] = pnoise2(
                 x, y,
@@ -112,9 +140,9 @@ el.replaceWith(d);
                 persistence=pers,
                 lacunarity=lac
             )
-            
+
             # Gaussian signal to enforce a global optimum
-            signal = np.exp(-((i - N // 2) ** 2 + (j - N // 2) ** 2) / (2 * 3 ** 2))
+            signal = np.exp(-((i - N // 2)**2 + (j - N // 2)**2) / (2*3**2))
             board_values[i, j] += signal
 
     # Rescale fitness values to [0, 1]
@@ -178,11 +206,11 @@ position on the landscape.</dd>
     i, j = pos
     di = np.array([-1, -1, -1, 0, 0, 1, 1, 1])
     dj = np.array([-1, 0, 1, -1, 1, -1, 0, 1])
-    
+
     ni = i + di
     nj = j + dj
     mask = (ni &gt;= 0) &amp; (ni &lt; N) &amp; (nj &gt;= 0) &amp; (nj &lt; N)
-    
+
     return np.column_stack((ni[mask], nj[mask]))</code></pre>
 </details>
 <div class="desc"><p>Return all valid adjacent cells (Moore neighborhood)
@@ -219,7 +247,8 @@ around a given position.</p>
     Parameters
     ----------
     board_skills : np.ndarray
-        A 2D array of shape (N, N) assigning a skill identifier to each grid cell.
+        A 2D array of shape (N, N) assigning a skill identifier to
+         each grid cell.
     pos : array-like
         Current position [i, j] of the agent on the grid.
     skills : np.ndarray
@@ -234,7 +263,8 @@ around a given position.</p>
     np.ndarray
         An array of grid coordinates (shape: [k, 2]) corresponding to all
         cells within radius r of the agent&#39;s position whose skill matches
-        the specified skill. If no such cells exist, an empty array is returned.
+        the specified skill.
+        If no such cells exist, an empty array is returned.
     &#34;&#34;&#34;
     i, j = pos
     di_range = np.arange(-r, r + 1)
@@ -255,7 +285,7 @@ around a given position.</p>
 
     skill_values = board_skills[ni, nj]
     skill_match = np.isin(skill_values, skills)
-    
+
     return np.column_stack((ni[skill_match], nj[skill_match]))</code></pre>
 </details>
 <div class="desc"><p>Identify grid cells within a given radius that match a specified skill.</p>
@@ -265,7 +295,8 @@ The search is limited to a circular area defined by a Euclidean radius.</p>
 <h2 id="parameters">Parameters</h2>
 <dl>
 <dt><strong><code>board_skills</code></strong> :&ensp;<code>np.ndarray</code></dt>
-<dd>A 2D array of shape (N, N) assigning a skill identifier to each grid cell.</dd>
+<dd>A 2D array of shape (N, N) assigning a skill identifier to
+each grid cell.</dd>
 <dt><strong><code>pos</code></strong> :&ensp;<code>array-like</code></dt>
 <dd>Current position [i, j] of the agent on the grid.</dd>
 <dt><strong><code>skills</code></strong> :&ensp;<code>np.ndarray</code></dt>
@@ -280,7 +311,8 @@ The search is limited to a circular area defined by a Euclidean radius.</p>
 <dt><code>np.ndarray</code></dt>
 <dd>An array of grid coordinates (shape: [k, 2]) corresponding to all
 cells within radius r of the agent's position whose skill matches
-the specified skill. If no such cells exist, an empty array is returned.</dd>
+the specified skill.
+If no such cells exist, an empty array is returned.</dd>
 </dl></div>
 </dd>
 <dt id="src.landscape.mason_watts_landscape"><code class="name flex">
@@ -291,14 +323,21 @@ the specified skill. If no such cells exist, an empty array is returned.</dd>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def mason_watts_landscape(L, seed=None, rho=0.7, omega_min=3, omega_max=7, center_mean=False):
+<pre><code class="python">def mason_watts_landscape(
+    L,
+    seed=None,
+    rho=0.7,
+    omega_min=3,
+    omega_max=7,
+    center_mean=False
+):
     &#34;&#34;&#34;
     Generate a 2D fitness landscape inspired by Mason &amp; Watts (R version).
 
-    The landscape combines a dominant unimodal Gaussian peak with 
-    multi-scale smooth noise (Perlin-like) to create a discrete NxN grid 
-    that is locally correlated and visually smooth. This is intended to 
-    simulate complex problem spaces where neighboring solutions have 
+    The landscape combines a dominant unimodal Gaussian peak with
+    multi-scale smooth noise (Perlin-like) to create a discrete NxN grid
+    that is locally correlated and visually smooth. This is intended to
+    simulate complex problem spaces where neighboring solutions have
     similar fitness values, but with some local variation.
 
     Parameters
@@ -309,7 +348,8 @@ the specified skill. If no such cells exist, an empty array is returned.</dd>
         Seed for the random number generator (default: None).
     rho : float, optional
         Scaling factor for the amplitude of successive noise octaves
-        (default: 0.7). Lower values reduce the contribution of higher-frequency noise.
+        (default: 0.7).
+        Lower values reduce the contribution of higher-frequency noise.
     omega_min : int, optional
         Minimum octave index for generating smooth noise (default: 3).
     omega_max : int, optional
@@ -355,7 +395,13 @@ the specified skill. If no such cells exist, an empty array is returned.</dd>
         coarse = rng.uniform(0.0, 1.0, size=(octave, octave))
         coarse_seq = np.linspace(1, L, num=octave)
 
-        spline = RectBivariateSpline(coarse_seq, coarse_seq, coarse, kx=3, ky=3)
+        spline = RectBivariateSpline(
+            coarse_seq,
+            coarse_seq,
+            coarse,
+            kx=3,
+            ky=3
+        )
         octave_full = spline(fine, fine)  # (L, L)
 
         octave_full *= (rho ** omega)
@@ -380,7 +426,8 @@ similar fitness values, but with some local variation.</p>
 <dd>Seed for the random number generator (default: None).</dd>
 <dt><strong><code>rho</code></strong> :&ensp;<code>float</code>, optional</dt>
 <dd>Scaling factor for the amplitude of successive noise octaves
-(default: 0.7). Lower values reduce the contribution of higher-frequency noise.</dd>
+(default: 0.7).
+Lower values reduce the contribution of higher-frequency noise.</dd>
 <dt><strong><code>omega_min</code></strong> :&ensp;<code>int</code>, optional</dt>
 <dd>Minimum octave index for generating smooth noise (default: 3).</dd>
 <dt><strong><code>omega_max</code></strong> :&ensp;<code>int</code>, optional</dt>
