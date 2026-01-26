@@ -11,7 +11,7 @@ import numpy as np
 from multiprocessing import Pool
 
 file_directory = Path(__file__).parent
-data_directory = file_directory.parent.parent / 'Data'
+data_directory = file_directory.parent.parent / 'data'
 
 def run_simulation_wrapper(args):
     p, t, time_steps, n_samples, x, y = args
