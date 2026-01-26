@@ -2,6 +2,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy.stats as stats
 import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 # Run this file to visualize the results from a gridSearchParallel simulation
 # Set the p_value and t_value range as used in the simulation, then run this file using for example:
