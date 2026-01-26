@@ -42,7 +42,7 @@ Agents aim to improve their individual payoff by moving across the landscape usi
 - **Copying**: moving toward positions associated with higher fitness discovered by other agents
 - **Collaborating**: expanding their search space by leveraging the skills of nearby agents
 
-The model investigates how agents balance **exploration vs. exploitation** when searching for high-fitness regions.
+The model investigates how agents balance **exploration vs. exploitation** when searching for high-fitness regions using a **dynamic agent network** which includes turnover of agents.
 
 ---
 
@@ -51,11 +51,10 @@ The model investigates how agents balance **exploration vs. exploitation** when 
 Previous research has used similar models with **fixed agent networks** to study the optimal ratio between copying and collaboration.
 
 In this project, we aim to extend the model by introducing **dynamic agent networks**, reflecting the fact that real-world systems are not stationary. Specifically, we propose:
-- agents have a **limited lifetime (retirement)**
-- retired agents are replaced by **new hires** with new skills and positions
+- agents have a chance of being **removed** from the system (retirement)
+- retired agents are **replaced** by new agents with new skills and positions
 
 This allows us to study how **agent turnover** affects:
-- the effectiveness of collaboration
 - the relative payoff of copying vs. collaborating
 - overall collective performance
 
@@ -64,7 +63,7 @@ This allows us to study how **agent turnover** affects:
 We hypothesize that increased turnover will:
 - reduce the effectiveness of collaboration
 - increase the relative payoff of copying behavior  
-because fewer experienced (“wise”) agents are available for meaningful collaboration.
+because fewer experienced agents are available for meaningful collaboration.
 
 ---
 
@@ -78,8 +77,14 @@ The current implementation includes:
   - skill
   - payoff (fitness at their location)
 - Two movement mechanisms:
-  - **Local exploration** (adjacent cells)
-  - **Skill-based exploration** within a radius
+  - **Copying (exploitation)**: 
+    - possibility of moving to adjacent cells; OR
+    - moving to cells of own skill within radius r; OR
+    - moving to cell occupied by a neighbouring agents.
+  - **Collaboration (exploration)**:
+    - possibility of moving to adjacent cells; OR
+    - moving to cells of own skill within radius r; OR
+    - moving to cells with neighouring agents' skills within radius r
 - A probabilistic choice between:
   - copying other agents’ positions
   - collaborating via skill-sharing
@@ -108,4 +113,4 @@ pip install -r requirements.txt
 ## Authors
 Sooriya Karunaharan, Alara Karadeniz, Ivo Blok, Gileesa McCormack
 
-University of Amsterdam / Msc Compuational Sciencde / Complex System Simulation Course
+University of Amsterdam / Msc Compuational Science / Complex System Simulation Course

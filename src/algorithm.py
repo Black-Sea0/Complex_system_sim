@@ -148,7 +148,7 @@ class ComplexOptimizer:
                 self.agents[agent_idx]['payoff'] = best_payoff
                 moved_any = True
 
-        if save_every_step:
-            save_fitness_metrics(agents=self.agents, csv_filename=f"fitness_metrics_p_{self.p}_{index}.csv")
+        # if save_every_step:
+            # save_fitness_metrics(agents=self.agents, csv_filename=f"fitness_metrics_p_{self.p}_{index}.csv")
 
         return moved_any
