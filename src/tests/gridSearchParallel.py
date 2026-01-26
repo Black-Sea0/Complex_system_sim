@@ -14,7 +14,7 @@ file_directory = Path(__file__).parent
 data_directory = file_directory.parent.parent / 'Data'
 
 def run_simulation_wrapper(args):
-    p, t, n_samples, x, y = args
+    p, t, time_steps, n_samples, x, y = args
 
     start_time = time.time()
 
@@ -26,7 +26,7 @@ def run_simulation_wrapper(args):
         r=6,
         t=t,
         num_runs=n_samples,
-        timesteps=20
+        timesteps=time_steps
     )
     
     run_avgs_at_end = []
@@ -45,9 +45,10 @@ def run_simulation_wrapper(args):
 @click.option('--num_threads', default=16, help='max number of threads to use for parallel simulations')
 @click.option('--p_steps', default=11, help='number of divisions of copy-collaborate ratio range [0, 1]')
 @click.option('--t_steps', default=11, help='number of divisions of turnover ratio range [0, 1]')
+@click.option('--time_steps', default=20, help='number of (time) steps/iterations taken per simulation')
 @click.option('--n_samples', default=1000, help='number of simulations per parameter combination')
 @click.option('--output', required=True, help='name of output file, stored in data folder')
-def main(num_threads, p_steps, t_steps, n_samples, output):
+def main(num_threads, p_steps, t_steps, time_steps, n_samples, output):
     start_time = time.time()
 
     p_values = np.linspace(0, 1, p_steps)
@@ -57,7 +58,7 @@ def main(num_threads, p_steps, t_steps, n_samples, output):
     params_list = []
     for x, p in enumerate(p_values):
         for y, t in enumerate(t_values):
-            params_list.append((p, t, n_samples, x, y))
+            params_list.append((p, t, time_steps, n_samples, x, y))
     
     print(f"Running {len(params_list)} simulations in parallel...")
     

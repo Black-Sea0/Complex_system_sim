@@ -1,8 +1,34 @@
+# Code to define the functioning of the full algorithm, getting multiple samples, etc...
+
 from landscape import mason_watts_landscape, create_skill_map, get_skill_cells, get_adjacent_cells
 from agents import initialize_agents, replace_agents
 import numpy as np
 
 def step_simulation(board, skills, agents, N, S, A, p, r):
+    """
+    Update the simulation by running one step. All agents try to move once.
+
+    Parameters
+    ----------
+    board : np.ndarray
+        A 2D array of shape (N, N) representing the fitness landscape
+    skills : np.ndarray
+        A 2D array of shape (N, N) representing the skill of each cell
+    agents : list of dicts
+        An array of S dictionaries, each corresponding to an agent with a 'pos', 'skill' and 'payoff' attribute
+    N : int
+        Size of one dimension of the square grid
+    S : int
+        Number of total possible skills
+    A : int
+        Number of agents on the board
+    p : 
+    
+    Returns
+    -------
+    np.ndarray
+        Array of neighboring cell coordinates.
+    """
     """Perform one simulation step for all agents."""
     agent_order = np.random.permutation(A)
     

@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>src.landscape API documentation</title>
+<meta name="description" content="">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>src.landscape</code></h1>
+</header>
+<section id="section-intro">
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="src.landscape.create_skill_map"><code class="name flex">
+<span>def <span class="ident">create_skill_map</span></span>(<span>N, S)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def create_skill_map(N, S):
+    &#34;&#34;&#34; 
+    Assign a random skill to each cell on the grid.
+    &#34;&#34;&#34;
+    return np.random.randint(0, S, (N, N))</code></pre>
+</details>
+<div class="desc"><p>Assign a random skill to each cell on the grid.</p></div>
+</dd>
+<dt id="src.landscape.generate_fitness_landscape"><code class="name flex">
+<span>def <span class="ident">generate_fitness_landscape</span></span>(<span>N, oct, pers, lac)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def generate_fitness_landscape(N, oct, pers, lac):
+    &#34;&#34;&#34;
+    Generate a two-dimensional fitness landscape with a global optimum.
+
+    The landscape is constructed by combining Perlin noise, which introduces
+    ruggedness and local variation, with a Gaussian peak centered on the grid
+    to ensure the presence of a well-defined global maximum. This structure
+    mimics complex problem spaces with both local optima and an overarching
+    optimal solution.
+
+    Parameters
+    ----------
+    N : int
+        Size of one dimension of the square grid.
+    oct : int
+        Number of Perlin noise octaves, controlling the level of detail
+        in the landscape.
+    pers : float
+        Persistence parameter for Perlin noise, determining how much each
+        octave contributes to the final noise.
+    lac : float
+        Lacunarity parameter for Perlin noise, controlling the frequency
+        scaling between successive octaves.
+
+    Returns
+    -------
+    np.ndarray
+        A 2D array of shape (N, N) representing the fitness value of each
+        position on the landscape.
+    &#34;&#34;&#34;
+
+    board_values = np.zeros((N, N))
+    for i in range(N):
+        for j in range(N):
+            x = i / N
+            y = j / N
+            
+            # Perlin noise component (ruggedness)
+            board_values[i, j] = pnoise2(
+                x, y,
+                octaves=oct,
+                persistence=pers,
+                lacunarity=lac
+            )
+            
+            # Gaussian signal to enforce a global optimum
+            signal = np.exp(-((i - N // 2) ** 2 + (j - N // 2) ** 2) / (2 * 3 ** 2))
+            board_values[i, j] += signal
+
+    # Rescale fitness values to [0, 1]
+    min_val = board_values.min()
+    max_val = board_values.max()
+    board_values = (board_values - min_val) / (max_val - min_val)
+    return board_values</code></pre>
+</details>
+<div class="desc"><p>Generate a two-dimensional fitness landscape with a global optimum.</p>
+<p>The landscape is constructed by combining Perlin noise, which introduces
+ruggedness and local variation, with a Gaussian peak centered on the grid
+to ensure the presence of a well-defined global maximum. This structure
+mimics complex problem spaces with both local optima and an overarching
+optimal solution.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>N</code></strong> :&ensp;<code>int</code></dt>
+<dd>Size of one dimension of the square grid.</dd>
+<dt><strong><code>oct</code></strong> :&ensp;<code>int</code></dt>
+<dd>Number of Perlin noise octaves, controlling the level of detail
+in the landscape.</dd>
+<dt><strong><code>pers</code></strong> :&ensp;<code>float</code></dt>
+<dd>Persistence parameter for Perlin noise, determining how much each
+octave contributes to the final noise.</dd>
+<dt><strong><code>lac</code></strong> :&ensp;<code>float</code></dt>
+<dd>Lacunarity parameter for Perlin noise, controlling the frequency
+scaling between successive octaves.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>np.ndarray</code></dt>
+<dd>A 2D array of shape (N, N) representing the fitness value of each
+position on the landscape.</dd>
+</dl></div>
+</dd>
+<dt id="src.landscape.get_adjacent_cells"><code class="name flex">
+<span>def <span class="ident">get_adjacent_cells</span></span>(<span>N, pos)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_adjacent_cells(N, pos):
+    &#34;&#34;&#34;
+    Return all valid adjacent cells (Moore neighborhood)
+    around a given position.
+
+    Parameters
+    ----------
+    pos : array-like
+        Current position [i, j] of the agent.
+    N : int
+        Size of one dimension of the square grid.
+
+    Returns
+    -------
+    np.ndarray
+        Array of neighboring cell coordinates.
+    &#34;&#34;&#34;
+    i, j = pos
+    di = np.array([-1, -1, -1, 0, 0, 1, 1, 1])
+    dj = np.array([-1, 0, 1, -1, 1, -1, 0, 1])
+    
+    ni = i + di
+    nj = j + dj
+    mask = (ni &gt;= 0) &amp; (ni &lt; N) &amp; (nj &gt;= 0) &amp; (nj &lt; N)
+    
+    return np.column_stack((ni[mask], nj[mask]))</code></pre>
+</details>
+<div class="desc"><p>Return all valid adjacent cells (Moore neighborhood)
+around a given position.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>pos</code></strong> :&ensp;<code>array-like</code></dt>
+<dd>Current position [i, j] of the agent.</dd>
+<dt><strong><code>N</code></strong> :&ensp;<code>int</code></dt>
+<dd>Size of one dimension of the square grid.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>np.ndarray</code></dt>
+<dd>Array of neighboring cell coordinates.</dd>
+</dl></div>
+</dd>
+<dt id="src.landscape.get_skill_cells"><code class="name flex">
+<span>def <span class="ident">get_skill_cells</span></span>(<span>board_skills, pos, skills, r, N)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_skill_cells(board_skills, pos, skills, r, N):
+    &#34;&#34;&#34;
+    Identify grid cells within a given radius that match a specified skill.
+
+    This function searches the local neighborhood around an agent&#39;s position
+    and returns all grid cells whose assigned skill matches the target skill.
+    The search is limited to a circular area defined by a Euclidean radius.
+
+    Parameters
+    ----------
+    board_skills : np.ndarray
+        A 2D array of shape (N, N) assigning a skill identifier to each grid cell.
+    pos : array-like
+        Current position [i, j] of the agent on the grid.
+    skills : np.ndarray
+        Skill identifiers to match with.
+    r : int or float
+        Euclidean radius within which cells are considered.
+    N : int
+        Size of one dimension of the square grid.
+
+    Returns
+    -------
+    np.ndarray
+        An array of grid coordinates (shape: [k, 2]) corresponding to all
+        cells within radius r of the agent&#39;s position whose skill matches
+        the specified skill. If no such cells exist, an empty array is returned.
+    &#34;&#34;&#34;
+    i, j = pos
+    di_range = np.arange(-r, r + 1)
+
+    di, dj = np.meshgrid(di_range, di_range, indexing=&#39;ij&#39;)
+
+    di_flat = di.ravel()
+    dj_flat = dj.ravel()
+
+    distances = np.sqrt(di_flat**2 + dj_flat**2)
+    mask = (distances &lt;= r)
+    ni = i + di_flat[mask]
+    nj = j + dj_flat[mask]
+
+    valid_mask = (ni &gt;= 0) &amp; (ni &lt; N) &amp; (nj &gt;= 0) &amp; (nj &lt; N)
+    ni = ni[valid_mask]
+    nj = nj[valid_mask]
+
+    skill_values = board_skills[ni, nj]
+    skill_match = np.isin(skill_values, skills)
+    
+    return np.column_stack((ni[skill_match], nj[skill_match]))</code></pre>
+</details>
+<div class="desc"><p>Identify grid cells within a given radius that match a specified skill.</p>
+<p>This function searches the local neighborhood around an agent's position
+and returns all grid cells whose assigned skill matches the target skill.
+The search is limited to a circular area defined by a Euclidean radius.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>board_skills</code></strong> :&ensp;<code>np.ndarray</code></dt>
+<dd>A 2D array of shape (N, N) assigning a skill identifier to each grid cell.</dd>
+<dt><strong><code>pos</code></strong> :&ensp;<code>array-like</code></dt>
+<dd>Current position [i, j] of the agent on the grid.</dd>
+<dt><strong><code>skills</code></strong> :&ensp;<code>np.ndarray</code></dt>
+<dd>Skill identifiers to match with.</dd>
+<dt><strong><code>r</code></strong> :&ensp;<code>int</code> or <code>float</code></dt>
+<dd>Euclidean radius within which cells are considered.</dd>
+<dt><strong><code>N</code></strong> :&ensp;<code>int</code></dt>
+<dd>Size of one dimension of the square grid.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>np.ndarray</code></dt>
+<dd>An array of grid coordinates (shape: [k, 2]) corresponding to all
+cells within radius r of the agent's position whose skill matches
+the specified skill. If no such cells exist, an empty array is returned.</dd>
+</dl></div>
+</dd>
+<dt id="src.landscape.mason_watts_landscape"><code class="name flex">
+<span>def <span class="ident">mason_watts_landscape</span></span>(<span>L, seed=None, rho=0.7, omega_min=3, omega_max=7, center_mean=False)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def mason_watts_landscape(L, seed=None, rho=0.7, omega_min=3, omega_max=7, center_mean=False):
+    &#34;&#34;&#34;
+    Generate a 2D fitness landscape inspired by Mason &amp; Watts (R version).
+
+    The landscape combines a dominant unimodal Gaussian peak with 
+    multi-scale smooth noise (Perlin-like) to create a discrete NxN grid 
+    that is locally correlated and visually smooth. This is intended to 
+    simulate complex problem spaces where neighboring solutions have 
+    similar fitness values, but with some local variation.
+
+    Parameters
+    ----------
+    L : int
+        Size of one dimension of the square grid (NxN).
+    seed : int or None, optional
+        Seed for the random number generator (default: None).
+    rho : float, optional
+        Scaling factor for the amplitude of successive noise octaves
+        (default: 0.7). Lower values reduce the contribution of higher-frequency noise.
+    omega_min : int, optional
+        Minimum octave index for generating smooth noise (default: 3).
+    omega_max : int, optional
+        Maximum octave index for generating smooth noise (default: 7).
+    center_mean : bool, optional
+        If True, the Gaussian peak is centered in the middle of the grid;
+        otherwise, it is randomly positioned (default: False).
+
+    Returns
+    -------
+    np.ndarray
+        A 2D array of shape (L, L) representing the fitness of each cell.
+        Fitness values are scaled such that the maximum value is 100.0.
+        The grid is discrete but visually smooth due to the combination of
+        Gaussian signal and interpolated multi-scale noise.
+    &#34;&#34;&#34;
+    rng = np.random.default_rng(seed)
+
+    # 1) Unimodal bivariate Gaussian &#34;signal&#34;
+    R = 3 * (L / 100.0)
+    sd = np.sqrt(R)
+
+    xs = np.arange(1, L + 1)
+
+    if center_mean:
+        mu_x = (L + 1) / 2.0
+        mu_y = (L + 1) / 2.0
+    else:
+        mu_x = rng.uniform(1, L)
+        mu_y = rng.uniform(1, L)
+
+    X = norm.pdf(xs, loc=mu_x, scale=sd)
+    Y = norm.pdf(xs, loc=mu_y, scale=sd)
+
+    fitness = np.outer(X, Y)
+    fitness = fitness / np.max(fitness)
+
+    # 2) &#34;Perlin noise&#34; (value noise + bicubic interpolation)
+    fine = np.arange(1, L + 1)
+
+    for omega in range(omega_min, omega_max + 1):
+        octave = 2 ** omega
+        coarse = rng.uniform(0.0, 1.0, size=(octave, octave))
+        coarse_seq = np.linspace(1, L, num=octave)
+
+        spline = RectBivariateSpline(coarse_seq, coarse_seq, coarse, kx=3, ky=3)
+        octave_full = spline(fine, fine)  # (L, L)
+
+        octave_full *= (rho ** omega)
+        fitness += octave_full
+
+    # 3) Scale to max=100 (like R)
+    fitness = fitness * (100.0 / np.max(fitness))
+
+    return fitness</code></pre>
+</details>
+<div class="desc"><p>Generate a 2D fitness landscape inspired by Mason &amp; Watts (R version).</p>
+<p>The landscape combines a dominant unimodal Gaussian peak with
+multi-scale smooth noise (Perlin-like) to create a discrete NxN grid
+that is locally correlated and visually smooth. This is intended to
+simulate complex problem spaces where neighboring solutions have
+similar fitness values, but with some local variation.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>L</code></strong> :&ensp;<code>int</code></dt>
+<dd>Size of one dimension of the square grid (NxN).</dd>
+<dt><strong><code>seed</code></strong> :&ensp;<code>int</code> or <code>None</code>, optional</dt>
+<dd>Seed for the random number generator (default: None).</dd>
+<dt><strong><code>rho</code></strong> :&ensp;<code>float</code>, optional</dt>
+<dd>Scaling factor for the amplitude of successive noise octaves
+(default: 0.7). Lower values reduce the contribution of higher-frequency noise.</dd>
+<dt><strong><code>omega_min</code></strong> :&ensp;<code>int</code>, optional</dt>
+<dd>Minimum octave index for generating smooth noise (default: 3).</dd>
+<dt><strong><code>omega_max</code></strong> :&ensp;<code>int</code>, optional</dt>
+<dd>Maximum octave index for generating smooth noise (default: 7).</dd>
+<dt><strong><code>center_mean</code></strong> :&ensp;<code>bool</code>, optional</dt>
+<dd>If True, the Gaussian peak is centered in the middle of the grid;
+otherwise, it is randomly positioned (default: False).</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>np.ndarray</code></dt>
+<dd>A 2D array of shape (L, L) representing the fitness of each cell.
+Fitness values are scaled such that the maximum value is 100.0.
+The grid is discrete but visually smooth due to the combination of
+Gaussian signal and interpolated multi-scale noise.</dd>
+</dl></div>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="src" href="index.html">src</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="src.landscape.create_skill_map" href="#src.landscape.create_skill_map">create_skill_map</a></code></li>
+<li><code><a title="src.landscape.generate_fitness_landscape" href="#src.landscape.generate_fitness_landscape">generate_fitness_landscape</a></code></li>
+<li><code><a title="src.landscape.get_adjacent_cells" href="#src.landscape.get_adjacent_cells">get_adjacent_cells</a></code></li>
+<li><code><a title="src.landscape.get_skill_cells" href="#src.landscape.get_skill_cells">get_skill_cells</a></code></li>
+<li><code><a title="src.landscape.mason_watts_landscape" href="#src.landscape.mason_watts_landscape">mason_watts_landscape</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

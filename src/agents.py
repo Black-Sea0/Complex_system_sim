@@ -1,9 +1,6 @@
-# Code to initialize agents
-
-
+# Code to create, reset and evaluate agents
 
 import numpy as np
-
 
 def initialize_agents(board_values, A, N, S):
     """
@@ -37,7 +34,7 @@ def initialize_agents(board_values, A, N, S):
             The fitness value at the agent's current position.
     """
         
-    agents = [] #TODO: we can make these a class later
+    agents = []
     for _ in range(A):
         pos = np.random.randint(0, N, 2)
         skill = np.random.randint(0, S)
