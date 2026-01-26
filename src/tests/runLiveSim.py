@@ -67,7 +67,19 @@ def update_plot(scatters, agents):
 @click.option('--t', default=0.0, help='turnover rate for agents')
 @click.option('--p', default=0.7, help='collaboration vs. copying rate. p = collaboration, 1-p = copying.')
 def main(t, p):
+    """
+    Run a single instance of the simulation to visualize the movements of the agents on the fitness landscape.
+
+    Parameters
+    ----------
+    t: Turnover rate for the agents. Each agent has a chance t of being replaced each timestep
+        with an agent that spawns in a random location with a random skill.
+    p: Collaborate-Copy ratio of the network. For each agent this is the rate that decide if they will
+        copy or collaborate. p = probability of collaboration, 1 - p = probability of copying.
+    """
     global agents
+    assert t >= 0.0 and t <= 1.0, f"t is expected to be a float between 0 or 1, got: {t}"
+    assert p >= 0.0 and p <= 1.0, f"p is expected to be a float between 0 or 1, got: {p}"
     N = 100
     S = 100
     A = 16
@@ -75,11 +87,12 @@ def main(t, p):
     
 
     # Generate fitness landscape and skill map
-    # board = generate_fitness_landscape(N, NOISE_OCTAVES, NOISE_PERSISTENCE, NOISE_LACUNARITY)
     board = mason_watts_landscape(N)
     skills = create_skill_map(N, S)
+
     # Initialize agents
     agents = initialize_agents(board, A, N, S)
+
     # Set up the plot
     fig, ax, scatters = setup_plot(board, agents)
 
@@ -87,7 +100,7 @@ def main(t, p):
     def on_click(event):
         global agents
         agents = step_simulation(board, skills, agents, N, S, A, p, r)  # Updates agent positions
-        agents = replace_agents(agents, board, A, N, S, t)
+        agents = replace_agents(agents, board, A, N, S, t) #triggers a turnover
         update_plot(scatters, agents)                 # Reflect changes visually
         print("Simulation step completed")
 
