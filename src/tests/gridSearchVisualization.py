@@ -23,8 +23,9 @@ optimal_p_indices = np.argmax(simulation_results, axis=0)
 optimal_p = p_values[optimal_p_indices]
 optimal_values = simulation_results[optimal_p_indices, np.arange(len(t_values))]
 
-lin_regression = stats.linregress(t_values, optimal_p)
-print("linear regression p-value: ", lin_regression.pvalue)
+lin_regression = stats.linregress(t_values, optimal_p, alternative='less')
+print("linear regression slope: ", lin_regression.slope, "linear regression intercept: ", lin_regression.intercept)
+print("p-value: ", lin_regression.pvalue)
 
 # Plot 1
 P, T = np.meshgrid(t_values, p_values)
@@ -73,7 +74,9 @@ plt.show()
 
 
 # Plot 3
-def plot_avg_vs_time_loglog(csv_path="avg_vs_time.csv"):
+t = 0
+p = 0.67
+def plot_avg_vs_time_loglog(csv_path=f"avg_vs_time_{p}_{t}.csv"):
     timesteps = []
     avg_payoffs = []
 
@@ -94,8 +97,8 @@ def plot_avg_vs_time_loglog(csv_path="avg_vs_time.csv"):
     plt.ylabel("Average Payoff (log)")
     plt.title("Average Payoff vs Time (Log–Log)")
     plt.grid(True, which="both", ls="--", alpha=0.5)
-    plt.savefig("avg_vs_time_loglog.png", dpi=300)
+    plt.savefig(f"avg_vs_time_loglog_{p}_{t}.png", dpi=300)
     plt.tight_layout()
     plt.show()
 
-plot_avg_vs_time_loglog(csv_path="avg_vs_time.csv")
+plot_avg_vs_time_loglog(csv_path=f"avg_vs_time_{p}_{t}.csv")

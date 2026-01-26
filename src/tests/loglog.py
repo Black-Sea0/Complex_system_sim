@@ -9,8 +9,8 @@ import gc
 from multiprocessing import Pool
 import csv
 
-def main(N = 100, S = 100, A = 16, p = 0.67, r = 6, t = 0.07, timesteps = 101):
-    csv_path = "avg_vs_time.csv"
+def main(N = 100, S = 100, A = 16, p = 0.67, r = 6, t = 0, timesteps = 101):
+    csv_path = f"avg_vs_time_{p}_{t}.csv"
 
     # Reset CSV but keep header
     with open(csv_path, "w", newline="") as f:

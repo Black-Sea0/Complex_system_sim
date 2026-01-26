@@ -62,7 +62,7 @@ def run_simulation(N, S, A, p, r, t, timesteps, save_to_csv: bool = False):
 
     # save to csv
     if save_to_csv:
-        csv_path = "avg_vs_time.csv"
+        csv_path = f"avg_vs_time_{p}_{t}.csv"
         file_exists = os.path.isfile(csv_path)
         with open(csv_path, mode="a", newline="") as f:
             writer = csv.writer(f)
