@@ -3,7 +3,10 @@ import numpy as np
 import scipy.stats as stats
 import sys
 import os
+
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
+from algorithm import run_simulation
 
 # Run this file to visualize the results from a gridSearchParallel simulation
 # Set the p_value and t_value range as used in the simulation, then run this file using for example:
@@ -64,4 +67,25 @@ ax2.set_ylabel('Average Performance')
 ax2.grid(True, alpha=0.3)
 
 plt.tight_layout()
+plt.show()
+
+
+# Plot 3
+fig3, ax3 = plt.subplots(figsize=(10, 6))
+
+payoffs_history = run_simulation(
+    N = 100, S = 100, A = 16, p = 0.67, r = 6, t = 0.07, timesteps = 20, save_to_csv=False
+)
+
+avg_payoff = np.mean(payoffs_history, axis=1)
+timesteps_arr = np.arange(1, len(avg_payoff) + 1)
+
+plt.figure(figsize=(6, 4))
+plt.loglog(timesteps_arr, avg_payoff)
+plt.xlabel("Timestep (log)")
+plt.ylabel("Average Payoff (log)")
+plt.title("Average Payoff vs Time (Log–Log)")
+plt.grid(True, which="both", ls="--", alpha=0.5)
+plt.tight_layout()
+#plt.savefig("loglog_plot.png", dpi=300)
 plt.show()
