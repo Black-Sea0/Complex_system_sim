@@ -1,4 +1,4 @@
-# Code to generate landscape
+# Code to generate a landscape and handle board-adjacent operations
 
 import numpy as np
 from noise import pnoise2
@@ -63,7 +63,19 @@ def generate_fitness_landscape(N, oct, pers, lac):
 
 def create_skill_map(N, S):
     """ 
-    Assign a random skill to each cell on the grid.
+    Generates the skill attribute for each cell in the map, given the number of allowed unique skills.
+
+    Parameters
+    ----------
+    N : int
+        Size of one dimension of the square grid.
+    S : int
+        Number of possible unique skills.
+
+    Returns
+    -------
+    np.ndarray
+        A 2D array of shape (N, N) representing the skill value of each cell in the map.
     """
     return np.random.randint(0, S, (N, N))
 
