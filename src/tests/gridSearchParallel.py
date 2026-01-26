@@ -1,7 +1,10 @@
 import sys
 import os
 import time
+from pathlib import Path
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+cwd = Path(__file__).parent
+cwd_data = cwd.parent.parent / "Data"
 
 from algorithm import run_multiple_simulations
 import matplotlib.pyplot as plt
@@ -52,7 +55,7 @@ def main():
     
     print(f"Running {len(params_list)} simulations in parallel...")
     
-    with Pool(processes=75, maxtasksperchild=1) as pool: # hard-coded number of threads to use
+    with Pool(processes=72, maxtasksperchild=1) as pool: # hard-coded number of threads to use
         results = pool.map(run_simulation_wrapper, params_list)
     
     elapsed_time = time.time() - start_time
@@ -62,7 +65,7 @@ def main():
         simulation_results[x, y] = value
     
     print("Saving results!")
-    np.save("grid_search_results.npy", simulation_results)
+    np.save(f"{cwd_data}/grid_search_results.npy", simulation_results)
 
 if __name__ == "__main__":
     main()
