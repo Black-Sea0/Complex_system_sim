@@ -28,15 +28,14 @@ def step_simulation(board, skills, agents, N, S, A, p, r):
         Number of agents on the board.
     p : float
         copy-collaborate ratio.
-    r : float
-        turnover ratio.
+    r : int
+        radius of cell search during collaboration.
 
     Returns
     -------
-    np.ndarray
-        Array of neighboring cell coordinates.
+    list of dicts
+        the updated agents after the simulation step has finished.
     """
-    """Perform one simulation step for all agents."""
     agent_order = np.random.permutation(A)
 
     for agent_idx in agent_order:
@@ -91,8 +90,35 @@ def step_simulation(board, skills, agents, N, S, A, p, r):
 
 
 def run_simulation(N, S, A, p, r, t, timesteps):
-    """Run a complete simulation."""
-    # Initialize fresh state for each run
+    """
+    Run the simulation for a given number of successive steps.
+    Initializes a board, skills and agents given the given model parameters.
+
+    Parameters
+    ----------
+    N : int
+        Size of one dimension of the square grid.
+    S : int
+        Number of total possible skills.
+    A : int
+        Number of agents on the board.
+    p : float
+        copy-collaborate ratio.
+    r : int
+        radius of cell search during collaboration.
+    t : float
+        turnover ratio.
+    timesteps : int
+        number of steps to run the simulation for.
+
+    Returns
+    -------
+    np.ndarray
+        a 2D array of shape (timesteps x A), where element (i, j)
+         contains the payoff/fitness of agent j at timestep i.
+    """
+
+    # initialize fresh state for each run
     board = mason_watts_landscape(N)
     skills = create_skill_map(N, S)
     agents = initialize_agents(board, A, N, S)
@@ -110,7 +136,38 @@ def run_simulation(N, S, A, p, r, t, timesteps):
 
 
 def run_multiple_simulations(N, S, A, p, r, t, num_runs, timesteps):
-    """Run multiple simulations with same parameters."""
+    """
+    Run a simulation multiple times with the same model parameters for a
+    given number of successive steps.
+    Initializes a board, skills and agents given the given model parameters.
+
+    Parameters
+    ----------
+    N : int
+        Size of one dimension of the square grid.
+    S : int
+        Number of total possible skills.
+    A : int
+        Number of agents on the board.
+    p : float
+        copy-collaborate ratio.
+    r : int
+        radius of cell search during collaboration.
+    t : float
+        turnover ratio.
+    num_runs : int
+        number of simulations to do.
+    timesteps : int
+        number of steps to run the simulation for.
+
+    Returns
+    -------
+    list of np.ndarrays
+        a list of 2D arrays of shape (timesteps x A). Each 2D array stores the
+        payoff history for a single simulation run.
+        Element (i, j) of each entry contains the payoff/fitness of agent j at
+        timestep i.
+    """
     all_results = []
 
     for _ in range(num_runs):

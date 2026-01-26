@@ -53,7 +53,38 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def run_multiple_simulations(N, S, A, p, r, t, num_runs, timesteps):
-    &#34;&#34;&#34;Run multiple simulations with same parameters.&#34;&#34;&#34;
+    &#34;&#34;&#34;
+    Run a simulation multiple times with the same model parameters for a
+    given number of successive steps.
+    Initializes a board, skills and agents given the given model parameters.
+
+    Parameters
+    ----------
+    N : int
+        Size of one dimension of the square grid.
+    S : int
+        Number of total possible skills.
+    A : int
+        Number of agents on the board.
+    p : float
+        copy-collaborate ratio.
+    r : int
+        radius of cell search during collaboration.
+    t : float
+        turnover ratio.
+    num_runs : int
+        number of simulations to do.
+    timesteps : int
+        number of steps to run the simulation for.
+
+    Returns
+    -------
+    list of np.ndarrays
+        a list of 2D arrays of shape (timesteps x A). Each 2D array stores the
+        payoff history for a single simulation run.
+        Element (i, j) of each entry contains the payoff/fitness of agent j at
+        timestep i. 
+    &#34;&#34;&#34;
     all_results = []
 
     for _ in range(num_runs):
@@ -62,7 +93,36 @@ el.replaceWith(d);
 
     return all_results</code></pre>
 </details>
-<div class="desc"><p>Run multiple simulations with same parameters.</p></div>
+<div class="desc"><p>Run a simulation multiple times with the same model parameters for a
+given number of successive steps.
+Initializes a board, skills and agents given the given model parameters.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>N</code></strong> :&ensp;<code>int</code></dt>
+<dd>Size of one dimension of the square grid.</dd>
+<dt><strong><code>S</code></strong> :&ensp;<code>int</code></dt>
+<dd>Number of total possible skills.</dd>
+<dt><strong><code>A</code></strong> :&ensp;<code>int</code></dt>
+<dd>Number of agents on the board.</dd>
+<dt><strong><code>p</code></strong> :&ensp;<code>float</code></dt>
+<dd>copy-collaborate ratio.</dd>
+<dt><strong><code>r</code></strong> :&ensp;<code>int</code></dt>
+<dd>radius of cell search during collaboration.</dd>
+<dt><strong><code>t</code></strong> :&ensp;<code>float</code></dt>
+<dd>turnover ratio.</dd>
+<dt><strong><code>num_runs</code></strong> :&ensp;<code>int</code></dt>
+<dd>number of simulations to do.</dd>
+<dt><strong><code>timesteps</code></strong> :&ensp;<code>int</code></dt>
+<dd>number of steps to run the simulation for.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>list</code> of <code>np.ndarrays</code></dt>
+<dd>a list of 2D arrays of shape (timesteps x A). Each 2D array stores the
+payoff history for a single simulation run.
+Element (i, j) of each entry contains the payoff/fitness of agent j at
+timestep i.</dd>
+</dl></div>
 </dd>
 <dt id="src.algorithm.run_simulation"><code class="name flex">
 <span>def <span class="ident">run_simulation</span></span>(<span>N, S, A, p, r, t, timesteps)</span>
@@ -73,8 +133,35 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def run_simulation(N, S, A, p, r, t, timesteps):
-    &#34;&#34;&#34;Run a complete simulation.&#34;&#34;&#34;
-    # Initialize fresh state for each run
+    &#34;&#34;&#34;
+    Run the simulation for a given number of successive steps. 
+    Initializes a board, skills and agents given the given model parameters.
+
+    Parameters
+    ----------
+    N : int
+        Size of one dimension of the square grid.
+    S : int
+        Number of total possible skills.
+    A : int
+        Number of agents on the board.
+    p : float
+        copy-collaborate ratio.
+    r : int
+        radius of cell search during collaboration.
+    t : float
+        turnover ratio.
+    timesteps : int
+        number of steps to run the simulation for.
+
+    Returns
+    -------
+    np.ndarray
+        a 2D array of shape (timesteps x A), where element (i, j)
+         contains the payoff/fitness of agent j at timestep i. 
+    &#34;&#34;&#34;
+
+    # initialize fresh state for each run
     board = mason_watts_landscape(N)
     skills = create_skill_map(N, S)
     agents = initialize_agents(board, A, N, S)
@@ -90,7 +177,31 @@ el.replaceWith(d);
 
     return payoffs_history</code></pre>
 </details>
-<div class="desc"><p>Run a complete simulation.</p></div>
+<div class="desc"><p>Run the simulation for a given number of successive steps.
+Initializes a board, skills and agents given the given model parameters.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>N</code></strong> :&ensp;<code>int</code></dt>
+<dd>Size of one dimension of the square grid.</dd>
+<dt><strong><code>S</code></strong> :&ensp;<code>int</code></dt>
+<dd>Number of total possible skills.</dd>
+<dt><strong><code>A</code></strong> :&ensp;<code>int</code></dt>
+<dd>Number of agents on the board.</dd>
+<dt><strong><code>p</code></strong> :&ensp;<code>float</code></dt>
+<dd>copy-collaborate ratio.</dd>
+<dt><strong><code>r</code></strong> :&ensp;<code>int</code></dt>
+<dd>radius of cell search during collaboration.</dd>
+<dt><strong><code>t</code></strong> :&ensp;<code>float</code></dt>
+<dd>turnover ratio.</dd>
+<dt><strong><code>timesteps</code></strong> :&ensp;<code>int</code></dt>
+<dd>number of steps to run the simulation for.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>np.ndarray</code></dt>
+<dd>a 2D array of shape (timesteps x A), where element (i, j)
+contains the payoff/fitness of agent j at timestep i.</dd>
+</dl></div>
 </dd>
 <dt id="src.algorithm.step_simulation"><code class="name flex">
 <span>def <span class="ident">step_simulation</span></span>(<span>board, skills, agents, N, S, A, p, r)</span>
@@ -121,15 +232,14 @@ el.replaceWith(d);
         Number of agents on the board.
     p : float
         copy-collaborate ratio.
-    r : float
-        turnover ratio.
+    r : int
+        radius of cell search during collaboration.
 
     Returns
     -------
-    np.ndarray
-        Array of neighboring cell coordinates.
+    list of dicts
+        the updated agents after the simulation step has finished.
     &#34;&#34;&#34;
-    &#34;&#34;&#34;Perform one simulation step for all agents.&#34;&#34;&#34;
     agent_order = np.random.permutation(A)
 
     for agent_idx in agent_order:
@@ -200,13 +310,13 @@ an agent with a 'pos', 'skill' and 'payoff' attribute.</dd>
 <dd>Number of agents on the board.</dd>
 <dt><strong><code>p</code></strong> :&ensp;<code>float</code></dt>
 <dd>copy-collaborate ratio.</dd>
-<dt><strong><code>r</code></strong> :&ensp;<code>float</code></dt>
-<dd>turnover ratio.</dd>
+<dt><strong><code>r</code></strong> :&ensp;<code>int</code></dt>
+<dd>radius of cell search during collaboration.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <dl>
-<dt><code>np.ndarray</code></dt>
-<dd>Array of neighboring cell coordinates.</dd>
+<dt><code>list</code> of <code>dicts</code></dt>
+<dd>the updated agents after the simulation step has finished.</dd>
 </dl></div>
 </dd>
 </dl>
