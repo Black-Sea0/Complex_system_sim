@@ -72,9 +72,11 @@ def main(t, p):
 
     Parameters
     ----------
-    t: Turnover rate for the agents. Each agent has a chance t of being replaced each timestep
+    t: float
+        Turnover rate for the agents. Each agent has a chance t of being replaced each timestep
         with an agent that spawns in a random location with a random skill.
-    p: Collaborate-Copy ratio of the network. For each agent this is the rate that decide if they will
+    p: float
+        Collaborate-Copy ratio of the network. For each agent this is the rate that decide if they will
         copy or collaborate. p = probability of collaboration, 1 - p = probability of copying.
     """
     global agents
