@@ -6,26 +6,6 @@ This project is inspired by and heavily based on the following research paper:
 
 Akçakır, G., Lang, J.C. & Lamberson, P.J. Copy or collaborate? How networks impact collective problem solving. npj Complex 2, 35 (2025). https://doi.org/10.1038/s44260-025-00058-8 
 (GitHub: https://github.com/gulsahakcakir/Group-Problem-Solving)
-
-
----
-
-## TA questions
-- Do we need a phase plot?
-
-## TODO
-
-- (agents.py) Agents must die and be replaced - Alara
-  - Generate 16 agents at starts;
-  - Give each agent a random lifetime OR (equivalently) give each agent a chance to die each simulation step
-- (agents.py) Decide on network structure (linear, fully or partially connected) - fully connected
-- (simulation.py) measure average / best fitness value - Gileesa 
-- (simulation.py) make pipeline automatic - Sooriyaa
-- (simulation.py) collect (save) data on turnover rate and fitness values for each simulation step - Gilessa
-- (visualisation.py) create plots with varying turnover rate vs best average fitness
-- Do a literature review
-- (visualisation.py) do statistical test
-- are all functionalities implemented?
   
 ---
 
@@ -94,13 +74,12 @@ The current implementation includes:
 
 ## Parameters
 
-Key parameters defined in the simulation:
+The following paramaters are kept constant across all tests:
 
 ```python
 N = 100  # grid size (N x N)
 S = 100  # number of skills
 A = 16   # number of agents
-p = 0.8  # probability of collaboration vs copying
 r = 6    # collaboration radius
 ```
 
