@@ -3,6 +3,7 @@ import numpy as np
 import scipy.stats as stats
 import sys
 import os
+import csv
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
@@ -71,21 +72,29 @@ plt.show()
 
 
 # Plot 3
-fig3, ax3 = plt.subplots(figsize=(10, 6))
+def plot_avg_vs_time_loglog(csv_path="avg_vs_time.csv"):
+    timesteps = []
+    avg_payoffs = []
 
-payoffs_history = run_simulation(
-    N = 100, S = 100, A = 16, p = 0.67, r = 6, t = 0.07, timesteps = 20, save_to_csv=False
-)
+    with open(csv_path, newline="") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            t = int(row["timestep"])
+            avg = float(row["avg_payoff"])
 
-avg_payoff = np.mean(payoffs_history, axis=1)
-timesteps_arr = np.arange(1, len(avg_payoff) + 1)
+            # log-log requires positive values
+            if t > 0 and avg > 0:
+                timesteps.append(t)
+                avg_payoffs.append(avg)
 
-plt.figure(figsize=(6, 4))
-plt.loglog(timesteps_arr, avg_payoff)
-plt.xlabel("Timestep (log)")
-plt.ylabel("Average Payoff (log)")
-plt.title("Average Payoff vs Time (Log–Log)")
-plt.grid(True, which="both", ls="--", alpha=0.5)
-plt.tight_layout()
-#plt.savefig("loglog_plot.png", dpi=300)
-plt.show()
+    plt.figure(figsize=(6, 4))
+    plt.loglog(timesteps, avg_payoffs, marker="o")
+    plt.xlabel("Timestep (log)")
+    plt.ylabel("Average Payoff (log)")
+    plt.title("Average Payoff vs Time (Log–Log)")
+    plt.grid(True, which="both", ls="--", alpha=0.5)
+    plt.savefig("avg_vs_time_loglog.png", dpi=300)
+    plt.tight_layout()
+    plt.show()
+
+plot_avg_vs_time_loglog(csv_path="avg_vs_time.csv")
