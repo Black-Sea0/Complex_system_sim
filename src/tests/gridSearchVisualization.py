@@ -1,13 +1,16 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy.stats as stats
+import pathlib
 import sys
+
+file_directory = pathlib.Path(__file__).parent
+data_directory = file_directory.parent.parent / 'Data'
 
 # Run this file to visualize the results from a gridSearchParallel simulation
 # Set the p_value and t_value range as used in the simulation, then run this file using for example:
 # 'python gridSearchVisualization.py grid_search_results_1000_samples_high_res.npy'
-
-simulation_results = np.load(sys.argv[1])
+simulation_results = np.load(data_directory / sys.argv[1])
 
 p_values = np.linspace(0, 1, simulation_results.shape[0])
 t_values = np.linspace(0, 1, simulation_results.shape[1])

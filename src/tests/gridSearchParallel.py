@@ -7,9 +7,7 @@ cwd = Path(__file__).parent
 cwd_data = cwd.parent.parent / "Data"
 
 from algorithm import run_multiple_simulations
-import matplotlib.pyplot as plt
 import numpy as np
-import gc
 from multiprocessing import Pool
 
 def run_simulation_wrapper(args):
