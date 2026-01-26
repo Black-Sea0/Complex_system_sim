@@ -1,154 +1,79 @@
-from landscape import mason_watts_landscape, create_skill_map
+from landscape import mason_watts_landscape, create_skill_map, get_skill_cells, get_adjacent_cells
 from agents import initialize_agents, replace_agents
-from visualisation import setup_plot, update_plot
-from agents import get_adjacent_cells
-from landscape import get_skill_cells
-from statistical import save_fitness_metrics
-
 import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.widgets import Button
-import config
 
-class ComplexOptimizer:
-    def __init__(self, N, S, A, p, r, t):
-        self.N = N
-        self.S = S
-        self.A = A
-        self.p = p
-        self.r = r
-        self.t = t
+def step_simulation(board, skills, agents, N, S, A, p, r):
+    """Perform one simulation step for all agents."""
+    agent_order = np.random.permutation(A)
+    
+    for agent_idx in agent_order:
+        agent = agents[agent_idx]
+        current_pos = agent['pos']
+        current_skill = agent['skill']
+        current_payoff = agent['payoff']
         
-    def interactive_simulation(self):
-
-        self.board = mason_watts_landscape(self.N)
-        self.skills = create_skill_map(self.N, self.S)
-        self.agents = initialize_agents(self.board, self.A, self.N, self.S)
-
-        fig, ax, scatters = setup_plot(self.board, self.agents)
-
-        def on_click(event):
-            moved = self.step_simulation()  # Updates agent positions
-            self.agents = replace_agents(self.agents, self.board, self.A, self.N, self.S, self.t)
-            update_plot(scatters, self.agents)                 # Reflect changes visually
-            print("Simulation step completed")
-            if not moved:
-                print("No agents moved")
-
-        button = Button(plt.axes([0.4, 0.1, 0.2, 0.05]), "Next Step")
-        button.on_clicked(on_click)
-        plt.show()
-            
-    def run_simulation(self, index, timesteps = config.N_steps, save_metrics = False):
-        self.board = mason_watts_landscape(self.N)
-        self.skills = create_skill_map(self.N, self.S)
-        self.agents = initialize_agents(self.board, self.A, self.N, self.S)
-
-        data = np.zeros(shape=(timesteps, self.A))
-
-        for i in range(timesteps):
-            self.step_simulation(index=i, save_every_step=save_metrics)
-            self.agents = replace_agents(self.agents, self.board, self.A, self.N, self.S, self.t)
-            
-            data[i] = [agent['payoff'] for agent in self.agents]
-
-        # Save final step
-        if (save_metrics):
-            save_fitness_metrics(agents=self.agents, csv_filename=f"fitness_metrics_p_{self.p}_{index}.csv")
-
-        return data
-
-    def run_multiple_simulations(self, num_runs, timesteps = config.N_steps):
-        data = []
-
-        for i in range(num_runs):
-            data.append(self.run_simulation(index=i, timesteps=timesteps))
-
-        return data
-
-    def step_simulation(self, index, save_every_step: bool=False) -> bool:
-        """
-        Perform a single simulation step for all agents in the environment.
-
-        Each agent evaluates potential moves based on a combination of local exploration,
-        skill-based exploration, and interaction with other agents. The agent then moves
-        to the position with the highest payoff, if it improves upon its current payoff.
-
-        The movement rules for each agent are:
-        1. **Local exploration:** Consider all immediately adjacent cells.
-        2. **Skill-based exploration:** Consider all cells within a radius that match the agent's skill.
-        3. **Collaboration (with probability `p`):** Expand the search to include
-        skill-matching cells from neighboring agents.
-        4. **Copying (with probability `1 - p`):** Consider the current positions of other agents.
-
-        Candidate positions are evaluated, and the agent moves to the position with
-        the highest fitness (payoff) if it exceeds the agent's current payoff.
-
-        Parameters
-        ----------
-
-        Returns
-        -------
-        bool
-            True if at least one agent moved during this step; False otherwise.
-        """
-        moved_any = False
-
-        # TODO: when the agents teleport to each other (copying), they might land on each other.
-        # This is allowed for now, but we might want to prevent it later.
-        # It also makes agents seem to 'disappear' in the visualisation.
-
-        #Randomly shuffling the list of agents so that the movement order of the agents are not
-        #same in each generation. 
+        candidate_cells = []
         
-        agent_order = np.random.permutation(self.A)
-        for agent_idx in agent_order:
-            agent = self.agents[agent_idx]
-            current_pos = agent['pos']
-            current_skill = agent['skill']
-            current_payoff = agent['payoff']
+        # local neighbourhood
+        adjacent = get_adjacent_cells(N, current_pos)
+        if len(adjacent) > 0:
+            candidate_cells.extend(adjacent)
+        
+        # skill-based exploration
+        skills_to_check = [current_skill]
 
-            candidate_cells = []
+        if np.random.random() < p:  # collaboration
+            for neighbor_idx in range(A):
+                skills_to_check.append(agents[neighbor_idx]['skill'])
+        else:  # copying
+            for neighbor_idx in range(A):
+                if neighbor_idx != agent_idx:
+                    candidate_cells.append(agents[neighbor_idx]['pos'])
 
-            # Local exploration (adjacent cells)
-            adjacent = get_adjacent_cells(self.N, current_pos)
-            if len(adjacent) > 0:
-                candidate_cells.extend(adjacent)
-
-            # Skill-based exploration using own skill
-            skill_cells = get_skill_cells(self.skills, current_pos, current_skill, self.r, self.N)
-            if len(skill_cells) > 0:
-                candidate_cells.extend(skill_cells)
-
-            # Decide between collaboration and copying
-            if np.random.random() < self.p:  # collaboration
-                for neighbor_idx in range(self.A):
-                    if neighbor_idx != agent_idx:
-                        neighbor_skill = self.agents[neighbor_idx]['skill']
-                        collab_cells = get_skill_cells(self.skills, current_pos, neighbor_skill, self.r, self.N)
-                        if len(collab_cells) > 0:
-                            candidate_cells.extend(collab_cells)
-            else:  # copying
-                for neighbor_idx in range(self.A):
-                    if neighbor_idx != agent_idx:
-                        candidate_cells.append(self.agents[neighbor_idx]['pos'])
-
-            # Remove duplicate candidate cells
+        skills_to_check = np.unique(np.array(skills_to_check))
+        skill_cells = get_skill_cells(skills, current_pos, skills_to_check, r, N)
+        if len(skill_cells) > 0:
+            candidate_cells.extend(skill_cells)
+        
+        # find best move
+        if candidate_cells:
             candidate_cells = np.unique(np.array(candidate_cells), axis=0)
-
-            # Evaluate payoffs and choose best move
-            payoffs = [self.board[pos[0], pos[1]] for pos in candidate_cells]
+            payoffs = board[candidate_cells[:, 0], candidate_cells[:, 1]]
             best_idx = np.argmax(payoffs)
-            best_pos = candidate_cells[best_idx]
             best_payoff = payoffs[best_idx]
-
-            # Move only if payoff improves
+            
+            # move if improvement
             if best_payoff > current_payoff:
-                self.agents[agent_idx]['pos'] = best_pos
-                self.agents[agent_idx]['payoff'] = best_payoff
-                moved_any = True
+                best_pos = candidate_cells[best_idx]
+                agents[agent_idx]['pos'] = best_pos
+                agents[agent_idx]['payoff'] = best_payoff
+    
+    return agents
 
-        # if save_every_step:
-            # save_fitness_metrics(agents=self.agents, csv_filename=f"fitness_metrics_p_{self.p}_{index}.csv")
+def run_simulation(N, S, A, p, r, t, timesteps):
+    """Run a complete simulation."""
+    # Initialize fresh state for each run
+    board = mason_watts_landscape(N)
+    skills = create_skill_map(N, S)
+    agents = initialize_agents(board, A, N, S)
+    
+    payoffs_history = np.zeros((timesteps, A))
+    
+    for i in range(timesteps):
+        agents = step_simulation(board, skills, agents, N, S, A, p, r)
+        agents = replace_agents(agents, board, A, N, S, t)
+        
+        # record payoffs
+        payoffs_history[i] = [agent['payoff'] for agent in agents]
+    
+    return payoffs_history
 
-        return moved_any
+def run_multiple_simulations(N, S, A, p, r, t, num_runs, timesteps):
+    """Run multiple simulations with same parameters."""
+    all_results = []
+    
+    for _ in range(num_runs):
+        result = run_simulation(N, S, A, p, r, t, timesteps)
+        all_results.append(result)
+    
+    return all_results

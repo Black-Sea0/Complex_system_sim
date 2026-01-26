@@ -67,8 +67,34 @@ def create_skill_map(N, S):
     """
     return np.random.randint(0, S, (N, N))
 
+def get_adjacent_cells(N, pos):
+    """
+    Return all valid adjacent cells (Moore neighborhood)
+    around a given position.
 
-def get_skill_cells(board_skills, pos, skill, r, N):
+    Parameters
+    ----------
+    pos : array-like
+        Current position [i, j] of the agent.
+    N : int
+        Size of one dimension of the square grid.
+
+    Returns
+    -------
+    np.ndarray
+        Array of neighboring cell coordinates.
+    """
+    i, j = pos
+    di = np.array([-1, -1, -1, 0, 0, 1, 1, 1])
+    dj = np.array([-1, 0, 1, -1, 1, -1, 0, 1])
+    
+    ni = i + di
+    nj = j + dj
+    mask = (ni >= 0) & (ni < N) & (nj >= 0) & (nj < N)
+    
+    return np.column_stack((ni[mask], nj[mask]))
+
+def get_skill_cells(board_skills, pos, skills, r, N):
     """
     Identify grid cells within a given radius that match a specified skill.
 
@@ -82,8 +108,8 @@ def get_skill_cells(board_skills, pos, skill, r, N):
         A 2D array of shape (N, N) assigning a skill identifier to each grid cell.
     pos : array-like
         Current position [i, j] of the agent on the grid.
-    skill : int
-        Skill identifier to search for.
+    skills : np.ndarray
+        Skill identifiers to match with.
     r : int or float
         Euclidean radius within which cells are considered.
     N : int
@@ -96,18 +122,27 @@ def get_skill_cells(board_skills, pos, skill, r, N):
         cells within radius r of the agent's position whose skill matches
         the specified skill. If no such cells exist, an empty array is returned.
     """
-    cells = []
-    for di in range(-r, r + 1):
-        for dj in range(-r, r + 1):
-            if di == 0 and dj == 0:
-                continue
-            dist = np.sqrt(di ** 2 + dj ** 2)
-            if dist <= r:
-                ni, nj = pos[0] + di, pos[1] + dj
-                if 0 <= ni < N and 0 <= nj < N:
-                    if board_skills[ni, nj] == skill: 
-                        cells.append([ni, nj])
-    return np.array(cells)
+    i, j = pos
+    di_range = np.arange(-r, r + 1)
+
+    di, dj = np.meshgrid(di_range, di_range, indexing='ij')
+
+    di_flat = di.ravel()
+    dj_flat = dj.ravel()
+
+    distances = np.sqrt(di_flat**2 + dj_flat**2)
+    mask = (distances <= r)
+    ni = i + di_flat[mask]
+    nj = j + dj_flat[mask]
+
+    valid_mask = (ni >= 0) & (ni < N) & (nj >= 0) & (nj < N)
+    ni = ni[valid_mask]
+    nj = nj[valid_mask]
+
+    skill_values = board_skills[ni, nj]
+    skill_match = np.isin(skill_values, skills)
+    
+    return np.column_stack((ni[skill_match], nj[skill_match]))
 
 def mason_watts_landscape(L, seed=None, rho=0.7, omega_min=3, omega_max=7, center_mean=False):
     """

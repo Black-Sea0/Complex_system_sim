@@ -52,6 +52,7 @@ for i, t in enumerate(t_values):
     ax2.plot(p_values, simulation_results[:, i], color=color, alpha=0.5, linewidth=1.5, label=f't={t:.2f}')
     opt_index = optimal_p_indices[i]
     ax2.scatter(p_values[opt_index], simulation_results[opt_index, i], color=color, s=80, marker='X', alpha=0.8, linewidth=2)
+    print(f't={t:.2f}, optimal p={p_values[opt_index]:.2f}, performance={simulation_results[opt_index, i]:.4f}')
 
 sm = plt.cm.ScalarMappable(cmap=plt.cm.viridis, norm=norm)
 sm.set_array([])
