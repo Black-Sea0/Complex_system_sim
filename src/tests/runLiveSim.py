@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button
-from pathlib import Path
-import pandas as pd
+import click
 import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
@@ -63,13 +62,15 @@ def update_plot(scatters, agents):
         scatters[i].set_offsets([[agent["pos"][1], agent["pos"][0]]])
     plt.draw()
 
-def main():
+
+@click.command()
+@click.option('--t', default=0.0, help='turnover rate for agents')
+@click.option('--p', default=0.7, help='collaboration vs. copying rate. p = collaboration, 1-p = copying.')
+def main(t, p):
     global agents
     N = 100
     S = 100
     A = 16
-    t = 0.2
-    p = 0.7
     r = 6
     
 
