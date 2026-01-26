@@ -48,7 +48,6 @@ def run_simulation_wrapper(args):
 @click.option('--n_samples', default=1000, help='number of simulations per parameter combination')
 @click.option('--output', required=True, help='name of output file, stored in data folder')
 def main(num_threads, p_steps, t_steps, n_samples, output):
-    print(f"Saving to: {data_directory / output}")
     start_time = time.time()
 
     p_values = np.linspace(0, 1, p_steps)
@@ -72,7 +71,6 @@ def main(num_threads, p_steps, t_steps, n_samples, output):
         simulation_results[x, y] = value
     
     print("Saving results!")
-    # FIXED LINE: Remove curly braces, use path object directly
     np.save(data_directory / output, simulation_results)
 
 if __name__ == "__main__":
