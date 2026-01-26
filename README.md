@@ -120,6 +120,12 @@ Then collect the data by running the simulations:
 python gridSearchParallel.py --num_threads=75 --p_steps=31 --t_steps=31 --n_samples=1000 --output=grid_search_results_1000_samples_20_steps.npy
 # TODO add the other tests that generate saved data
 ```
+Because some of these tests can take up to an hour, you can instead run the reduced quality version below:
+```bash
+python gridSearchParallel.py --num_threads=4 --p_steps=3 --t_steps=3 --n_samples=20 --output=grid_search_results_20_samples_20_steps.npy
+# TODO add the other tests that generate saved data
+```
+
 Then plot the results with:
 ```bash
 python gridSearchVisualization.py 
