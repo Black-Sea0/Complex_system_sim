@@ -110,6 +110,22 @@ Clone the repository and install the required dependencies:
 pip install -r requirements.txt
 ```
 
+## Running Data / Getting Plots
+For convenience, first set the tests folder as your working directory:
+```bash
+cd src/tests
+```
+Then collect the data by running the simulations:
+```bash
+python gridSearchParallel.py --num_threads=75 --p_steps=31 --t_steps=31 --n_samples=1000 --output=grid_search_results_1000_samples_20_steps.npy
+# TODO add the other tests that generate saved data
+```
+Then plot the results with:
+```bash
+python gridSearchVisualization.py 
+```
+
+
 ## Authors
 Sooriya Karunaharan, Alara Karadeniz, Ivo Blok, Gileesa McCormack
 
