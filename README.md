@@ -112,15 +112,14 @@ python gridSearchVisualization.py --input=grid_search_results_20_samples_20_step
 python loglogVisualization.py --input=loglog_20_steps.npy
 ```
 
-If you wish to create more plots but do not wish you overwrite the previous plots then (the value for fignum can be any int the user wishes to use, the first saved figures are saved with 0 unless fignum specified):
+If you wish to create more plots but do not wish to overwrite the previous plots then(the value for fignum can be any int the user wishes to use, the first saved figures are saved with 0 unless fignum specified):
 ```bash
 python gridSearchVisualization.py --input=grid_search_results_20_samples_20_steps.npy --fignum=1
 ```
-If you wish to visualize a single run with agents moving on the grid then you can run:
+If you wish to visualize a single run with agents moving on the grid then you can run (The values for t and p can be changed to any values between [0,1]):
 ```bash
 python runLiveSim.py --t=0.2 --p=0.7
 ```
-The values for t and p can be changed to values [0,1]
 ---
 
 ## Documentation
