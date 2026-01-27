@@ -8,6 +8,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from algorithm import run_simulation
 import numpy as np
 import csv
+from pathlib import Path
 
 file_directory = Path(__file__).parent
 data_directory = file_directory.parent.parent / 'data' 
