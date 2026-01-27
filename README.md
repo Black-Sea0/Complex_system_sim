@@ -69,7 +69,7 @@ The current implementation includes:
   - copying other agents’ positions
   - collaborating via skill-sharing
 - An **interactive visualization** using Matplotlib
-- Assert statements where are user inputs to make sure an unwanted input that would break the code is not included
+- **Assert** statements where there are user inputs to make sure an unwanted input that would break the code is not included
 
 ---
 
