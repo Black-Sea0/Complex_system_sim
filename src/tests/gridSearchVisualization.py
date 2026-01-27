@@ -13,11 +13,8 @@ import csv
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
-from algorithm import run_simulation
-
 # Run this file to visualize the results from a gridSearchParallel simulation
 # Set the p_value and t_value range as used in the simulation, then run this file using for example:
-# 'python gridSearchVisualization.py grid_search_results_1000_samples_high_res.npy'
 # python gridSearchVisualization.py grid_search_results_1000_samples_high_res_20_steps.npy
 
 @click.command()
@@ -132,37 +129,6 @@ def main(input, fignum):
     plt.tight_layout()
     plt.savefig(f'{results_directory}/avg_perform{fignum}.png')
     plt.show()
-
-
-    # Plot 5: ...
-    t = 0
-    p = 0.67
-    def plot_avg_vs_time_loglog(csv_path=f"avg_vs_time_{p}_{t}.csv"):
-        timesteps = []
-        avg_payoffs = []
-
-        with open(csv_path, newline="") as f:
-            reader = csv.DictReader(f)
-            for row in reader:
-                t = int(row["timestep"])
-                avg = float(row["avg_payoff"])
-
-                # log-log requires positive values
-                if t > 0 and avg > 0:
-                    timesteps.append(t)
-                    avg_payoffs.append(avg)
-
-        plt.figure(figsize=(6, 4))
-        plt.loglog(timesteps, avg_payoffs, marker="o")
-        plt.xlabel("Timestep (log)")
-        plt.ylabel("Average Payoff (log)")
-        plt.title("Average Payoff vs Time (Log–Log)")
-        plt.grid(True, which="both", ls="--", alpha=0.5)
-        plt.tight_layout()
-        plt.savefig(f"{results_directory}/avg_vs_time_loglog_{p}_{t}{fignum}.png", dpi=300)
-        plt.show()
-
-    plot_avg_vs_time_loglog(csv_path=f"avg_vs_time_{p}_{t}.csv")
 
 if __name__ == "__main__":
     main()
