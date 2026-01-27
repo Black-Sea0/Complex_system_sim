@@ -19,7 +19,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 @click.command()
 @click.option('--input', required=True, help='name of input data file, stored in data folder (ex: grid_search.npy)')
-@click.option('--fignum', default=0, help='give an int value to so you do not overwrite other figures')
+@click.option('--fignum', default=0, help='give a positive int value to so you do not overwrite other figures')
 def main(input, fignum):
     """
     This function gets access to the data folder parse through it to make plots for visualizing the results.
@@ -32,6 +32,7 @@ def main(input, fignum):
         A number value that is added at the end of the names of the figures to make sure previous ones are not 
         overwritten if the user does not want that.
     """
+    assert fignum >= 0, f"fignum is expected to be an int above 0, got: {fignum}"
     simulation_results = np.load(data_directory / input)
     n_p, n_t, n_samples = simulation_results.shape
     p_values = np.linspace(0, 1, n_p)
