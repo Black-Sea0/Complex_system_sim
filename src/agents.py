@@ -1,6 +1,4 @@
-# Code to initialize agents
-
-
+# Code to create, reset and evaluate agents
 
 import numpy as np
 
@@ -36,8 +34,8 @@ def initialize_agents(board_values, A, N, S):
         - 'payoff' : float
             The fitness value at the agent's current position.
     """
-        
-    agents = [] #TODO: we can make these a class later
+
+    agents = []
     for _ in range(A):
         pos = np.random.randint(0, N, 2)
         skill = np.random.randint(0, S)
@@ -48,11 +46,12 @@ def initialize_agents(board_values, A, N, S):
         })
     return agents
 
+
 def replace_agents(agents, board_values, A, N, S, t):
     """
     Return a new list of agents with the 'dead' agents replaced.
 
-    Each new agent old agent is replaced with a new one that is randomly 
+    Each new agent old agent is replaced with a new one that is randomly
     assigned a position and skill.
 
     Parameters
@@ -68,8 +67,9 @@ def replace_agents(agents, board_values, A, N, S, t):
     S : int
         Total number of distinct skills.
     t : float
-        A float from 0, 1 to represent the chance of each agent having turnover.
-        
+        A float from 0, 1 to represent the chance of
+        each agent having turnover.
+
     Returns
     -------
     list of dict
@@ -90,6 +90,7 @@ def replace_agents(agents, board_values, A, N, S, t):
             agent['skill'] = skill
             agent['payoff'] = board_values[pos[0], pos[1]]
     return agents
+
 
 def get_average_fitness(agents):
     """
