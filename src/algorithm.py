@@ -92,7 +92,7 @@ def step_simulation(board, skills, agents, N, S, A, p, r):
 
 
     # initialize fresh state for each run
-def run_simulation(N, S, A, p, r, t, timesteps, csv_path, save_to_csv: bool = False):
+def run_simulation(N, S, A, p, r, t, timesteps, csv_path = '', save_to_csv: bool = False):
     """
     Run the simulation for a given number of successive steps.
     Initializes a board, skills and agents given the given model parameters.
