@@ -92,7 +92,7 @@ def step_simulation(board, skills, agents, N, S, A, p, r):
 
 
     # initialize fresh state for each run
-def run_simulation(N, S, A, p, r, t, timesteps, save_to_csv: bool = False):
+def run_simulation(N, S, A, p, r, t, timesteps, csv_path, save_to_csv: bool = False):
     """
     Run the simulation for a given number of successive steps.
     Initializes a board, skills and agents given the given model parameters.
@@ -113,9 +113,11 @@ def run_simulation(N, S, A, p, r, t, timesteps, save_to_csv: bool = False):
         turnover ratio.
     timesteps : int
         number of steps to run the simulation for.
+    csv_path : Path
+        a path to save the csv in
     save_to_csv : bool, default False
         a bool value indicating whether the data should be saved to a csv or not.
-        
+
     Returns
     -------
     np.ndarray
@@ -136,7 +138,6 @@ def run_simulation(N, S, A, p, r, t, timesteps, save_to_csv: bool = False):
         payoffs_history[i] = [agent['payoff'] for agent in agents]
     # save to csv
     if save_to_csv:
-        csv_path = f"avg_vs_time_{p}_{t}.csv"
         file_exists = os.path.isfile(csv_path)
         with open(csv_path, mode="a", newline="") as f:
             writer = csv.writer(f)

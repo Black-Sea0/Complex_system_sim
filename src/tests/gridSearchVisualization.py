@@ -14,6 +14,7 @@ import csv
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 from algorithm import run_simulation
+from loglog import loglog_plot
 
 # Run this file to visualize the results from a gridSearchParallel simulation
 # Set the p_value and t_value range as used in the simulation, then run this file using for example:
@@ -137,19 +138,20 @@ def main(input, fignum):
     # Plot 5: ...
     t = 0
     p = 0.67
-    def plot_avg_vs_time_loglog(csv_path=f"avg_vs_time_{p}_{t}.csv"):
+    def plot_avg_vs_time_loglog(csv_path=f"{data_directory}/avg_vs_time_{p}_{t}.csv"):
+        loglog_plot()
         timesteps = []
         avg_payoffs = []
 
         with open(csv_path, newline="") as f:
             reader = csv.DictReader(f)
             for row in reader:
-                t = int(row["timestep"])
+                time = int(row["timestep"])
                 avg = float(row["avg_payoff"])
 
                 # log-log requires positive values
-                if t > 0 and avg > 0:
-                    timesteps.append(t)
+                if time > 0 and avg > 0:
+                    timesteps.append(time)
                     avg_payoffs.append(avg)
 
         plt.figure(figsize=(6, 4))
@@ -162,7 +164,7 @@ def main(input, fignum):
         plt.savefig(f"{results_directory}/avg_vs_time_loglog_{p}_{t}{fignum}.png", dpi=300)
         plt.show()
 
-    plot_avg_vs_time_loglog(csv_path=f"avg_vs_time_{p}_{t}.csv")
+    plot_avg_vs_time_loglog(csv_path=f"{data_directory}/avg_vs_time_{p}_{t}.csv")
 
 if __name__ == "__main__":
     main()
