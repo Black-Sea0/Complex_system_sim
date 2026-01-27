@@ -91,7 +91,8 @@ def step_simulation(board, skills, agents, N, S, A, p, r):
     return agents
 
 
-def run_simulation(N, S, A, p, r, t, timesteps):
+    # initialize fresh state for each run
+def run_simulation(N, S, A, p, r, t, timesteps, save_to_csv: bool = False):
     """
     Run the simulation for a given number of successive steps.
     Initializes a board, skills and agents given the given model parameters.
@@ -112,17 +113,15 @@ def run_simulation(N, S, A, p, r, t, timesteps):
         turnover ratio.
     timesteps : int
         number of steps to run the simulation for.
-
+    save_to_csv : bool, default False
+        a bool value indicating whether the data should be saved to a csv or not.
+        
     Returns
     -------
     np.ndarray
         a 2D array of shape (timesteps x A), where element (i, j)
          contains the payoff/fitness of agent j at timestep i.
     """
-
-    # initialize fresh state for each run
-def run_simulation(N, S, A, p, r, t, timesteps, save_to_csv: bool = False):
-    """Run a complete simulation."""
     board = mason_watts_landscape(N)
     skills = create_skill_map(N, S)
     agents = initialize_agents(board, A, N, S)
