@@ -69,6 +69,7 @@ The current implementation includes:
   - copying other agents’ positions
   - collaborating via skill-sharing
 - An **interactive visualization** using Matplotlib
+- Assert statements where are user inputs to make sure an unwanted input that would break the code is not included
 
 ---
 
@@ -104,7 +105,11 @@ python gridSearchParallel.py --num_threads=4 --p_steps=3 --t_steps=3 --n_samples
 ```
 Then plot the results with:
 ```bash
-python gridSearchVisualization.py 
+python gridSearchVisualization.py --input=grid_search_results_20_samples_20_steps.npy
+```
+If you wish to create more plots but do not wish you overwrite the previous plots then (the value for fignum can be any int the user wishes to use, the first saved figures are saved with 0 unless fignum specified):
+```bash
+python gridSearchVisualization.py --input=grid_search_results_20_samples_20_steps.npy --fignum=1
 ```
 If you wish to visualize a single run with agents moving on the grid then you can run:
 ```bash

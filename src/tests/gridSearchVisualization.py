@@ -24,6 +24,17 @@ from algorithm import run_simulation
 @click.option('--input', required=True, help='name of input data file, stored in data folder (ex: grid_search.npy)')
 @click.option('--fignum', default=0, help='give an int value to so you do not overwrite other figures')
 def main(input, fignum):
+    """
+    This function gets access to the data folder parse through it to make plots for visualizing the results.
+
+    Parameters
+    ----------
+    input : str
+        Name of the input data file that is stored in the data folder.
+    fignum : int
+        A number value that is added at the end of the names of the figures to make sure previous ones are not 
+        overwritten if the user does not want that.
+    """
     simulation_results = np.load(data_directory / input)
     n_p, n_t, n_samples = simulation_results.shape
     p_values = np.linspace(0, 1, n_p)
