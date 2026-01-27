@@ -6,7 +6,7 @@ import sys
 import click
 
 file_directory = Path(__file__).parent
-data_directory = file_directory.parent.parent / 'data'
+data_directory = file_directory.parent.parent / 'results'
 
 # Run this file to visualize the results from a gridSearchParallel simulation
 # Set the p_value and t_value range as used in the simulation, then run this file using for example:
