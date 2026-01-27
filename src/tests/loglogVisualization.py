@@ -9,7 +9,6 @@ file_directory = Path(__file__).parent
 data_directory = file_directory.parent.parent / 'data'
 results_directory = file_directory.parent.parent / 'results'
 import os
-import csv
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 

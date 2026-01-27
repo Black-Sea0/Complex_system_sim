@@ -98,15 +98,20 @@ cd src/tests
 Then collect the data by running the simulations:
 ```bash
 python gridSearchParallel.py --num_threads=75 --p_steps=31 --t_steps=31 --n_samples=1000 --output=grid_search_results_1000_samples_20_steps.npy
+python loglog.py --output=loglog_20_steps.npy
 ```
 Because some of these tests can take up to an hour, you can instead run the reduced quality version below:
 ```bash
 python gridSearchParallel.py --num_threads=4 --p_steps=3 --t_steps=3 --n_samples=20 --output=grid_search_results_20_samples_20_steps.npy
+python loglog.py --output=loglog_20_steps.npy
 ```
+
 Then plot the results with:
 ```bash
 python gridSearchVisualization.py --input=grid_search_results_20_samples_20_steps.npy
+python loglogVisualization.py --input=loglog_20_steps.npy
 ```
+
 If you wish to create more plots but do not wish you overwrite the previous plots then (the value for fignum can be any int the user wishes to use, the first saved figures are saved with 0 unless fignum specified):
 ```bash
 python gridSearchVisualization.py --input=grid_search_results_20_samples_20_steps.npy --fignum=1
