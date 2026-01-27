@@ -16,9 +16,52 @@ data_directory = file_directory.parent.parent / 'data'
 @click.option('--input', required=True, help='name of input data file, stored in data folder (ex: grid_search.npy)')
 def main(input):
     simulation_results = np.load(data_directory / input)
+    n_p, n_t, n_samples = simulation_results.shape
+    p_values = np.linspace(0, 1, n_p)
+    t_values = np.linspace(0, 1, n_t)
+    Q = 25
+    block_size = n_samples // Q
 
-    p_values = np.linspace(0, 1, simulation_results.shape[0])
-    t_values = np.linspace(0, 1, simulation_results.shape[1])
+    p_optimal_blocks = np.zeros(shape=(len(t_values), Q))
+    for t_idx in range(len(t_values)):
+        for block_idx in range(Q):
+            start_sample = block_idx * block_size
+            end_sample = (block_idx + 1) * block_size
+            
+            block_data = simulation_results[:, t_idx, start_sample:end_sample]
+            block_avg = np.mean(block_data, axis=1)  # shape: (n_p_values,)
+            
+            optimal_p_idx = np.argmax(block_avg)
+            p_optimal_blocks[t_idx, block_idx] = p_values[optimal_p_idx]
+            
+    for t_index in range(n_t):
+        plt.scatter(np.full(Q, t_values[t_index]), p_optimal_blocks[t_index], alpha=0.1)
+        plt.scatter(t_values[t_index], np.average(p_optimal_blocks[t_index]), color='red')
+    
+    plt.xlabel('turnover ratio')
+    plt.ylabel('optimal copy-collaborate ratio')
+    plt.title(f'optimal copy-collaborate per block of {block_size} samples')
+    plt.show()
+
+    # bootstrap: calculate slope of many random picks of points
+    n_bootstrap = 10000
+    slopes = np.zeros(n_bootstrap)
+
+    for b in range(n_bootstrap):
+        block_indices = np.random.randint(Q, size=n_t)
+        y_bootstrap = p_optimal_blocks[np.arange(n_t), block_indices]
+
+        slope, _ = np.polyfit(t_values, y_bootstrap, 1)
+        slopes[b] = slope
+
+    plt.hist(slopes, bins=50, edgecolor='black')
+    plt.axvline(x=0, color='red', linestyle='--')
+    plt.xlabel('p_opt - t slope')
+    plt.title('Distribution of p_opt - t slope')
+    plt.show()
+
+    p_value_negative = np.mean(slopes >= 0)  # proportion of slopes ≥ 0 under null
+    print(f"p-value for slope < 0: {p_value_negative}")
 
     optimal_p_indices = np.argmax(simulation_results, axis=0)
     optimal_p = p_values[optimal_p_indices]

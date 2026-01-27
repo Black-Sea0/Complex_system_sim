@@ -73,7 +73,7 @@ def run_simulation_wrapper(args):
     
     print(f"Completed: p={p:.2f}, t={t:.2f} in {elapsed_time:.1f} seconds")
     
-    return (x, y, np.average(run_avgs_at_end))
+    return (x, y, run_avgs_at_end)
 
 @click.command()
 @click.option('--num_threads', default=16, help='max number of threads to use for parallel simulations')
@@ -114,7 +114,7 @@ def main(num_threads, p_steps, t_steps, time_steps, n_samples, output):
     t_values = np.linspace(0, 1, t_steps)
     
     #set up and run the simulation with the given arguments
-    simulation_results = np.zeros(shape=(len(p_values), len(t_values)))
+    simulation_results = np.zeros(shape=(len(p_values), len(t_values), n_samples))
     params_list = []
     for x, p in enumerate(p_values):
         for y, t in enumerate(t_values):
@@ -131,8 +131,8 @@ def main(num_threads, p_steps, t_steps, time_steps, n_samples, output):
     print(f"Simulations finished in {elapsed_time:.1f} seconds")
 
     #assign each result from the simulation to the correct position in the results array
-    for x, y, value in results:
-        simulation_results[x, y] = value
+    for x, y, avg_fitnesses in results:
+        simulation_results[x, y] = avg_fitnesses
     
     #save the results to a .nyp file in the directory 'data'
     print("Saving results!")
