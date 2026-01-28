@@ -19,7 +19,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 @click.command()
 @click.option('--input', required=True, help='name of input data file, stored in data folder (ex: grid_search.npy)')
-@click.option('--fignum', default=0, help='give an int value to so you do not overwrite other figures')
+@click.option('--fignum', default=0, help='give a positive int value to so you do not overwrite other figures')
 def main(input, fignum):
     """
     This function gets access to the data folder parse through it to make plots for visualizing the results.
@@ -32,6 +32,7 @@ def main(input, fignum):
         A number value that is added at the end of the names of the figures to make sure previous ones are not 
         overwritten if the user does not want that.
     """
+    assert fignum >= 0, f"fignum is expected to be an int above 0, got: {fignum}"
     simulation_results = np.load(data_directory / input)
     n_p, n_t, n_samples = simulation_results.shape
     p_values = np.linspace(0, 1, n_p)
@@ -165,6 +166,40 @@ def main(input, fignum):
 
     plt.tight_layout()
     plt.savefig(f'{results_directory}/avg_perform{fignum}.png')
+    plt.show()
+
+    # Plot: average fitness - copy-collaborate ratio curve t=0 (2D)
+    fig2, ax2 = plt.subplots(figsize=(12, 8))
+
+    for i, t in enumerate(t_values):
+        if t == 0:
+            ax2.plot(
+                p_values,
+                single_avg_results[:, i],
+                alpha=0.8,
+                linewidth=2
+            )
+
+            opt_index = np.argmax(single_avg_results[:, i])
+            ax2.scatter(
+                p_values[opt_index],
+                single_avg_results[opt_index, i],
+                s=80,
+                marker='X'
+            )
+
+            print(
+                f't={t:.2f}, optimal p={p_values[opt_index]:.2f}, '
+                f'performance={single_avg_results[opt_index, i]:.4f}'
+            )
+
+    ax2.set_xlabel('Copy-Collaborate Ratio')
+    ax2.set_ylabel('Average Performance')
+    ax2.grid(True, alpha=0.3)
+
+    plt.title("Collab–Copy Ratio vs. Average Performance (no turnover)")
+    plt.tight_layout()
+    plt.savefig(f'{results_directory}/avg_perform{fignum}_t0.png')
     plt.show()
 
 if __name__ == "__main__":

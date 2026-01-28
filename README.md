@@ -40,10 +40,7 @@ This allows us to study how **agent turnover** affects:
 
 ### Hypothesis
 
-We hypothesize that increased turnover will:
-- reduce the effectiveness of collaboration
-- increase the relative payoff of copying behavior  
-because fewer experienced agents are available for meaningful collaboration.
+We hypothesize that increased turnover will have a statistically significant effect on the optimal copy-collaboration ratio.
 
 ---
 
@@ -69,7 +66,7 @@ The current implementation includes:
   - copying other agents’ positions
   - collaborating via skill-sharing
 - An **interactive visualization** using Matplotlib
-- Assert statements where are user inputs to make sure an unwanted input that would break the code is not included
+- **Assert** statements where there are user inputs to make sure an unwanted input that would break the code is not included
 
 ---
 
@@ -112,15 +109,14 @@ python gridSearchVisualization.py --input=grid_search_results_20_samples_20_step
 python loglogVisualization.py --input=loglog_20_steps.npy
 ```
 
-If you wish to create more plots but do not wish you overwrite the previous plots then (the value for fignum can be any int the user wishes to use, the first saved figures are saved with 0 unless fignum specified):
+If you wish to create more plots but do not wish to overwrite the previous plots then(the value for fignum can be any int the user wishes to use, the first saved figures are saved with 0 unless fignum specified):
 ```bash
 python gridSearchVisualization.py --input=grid_search_results_20_samples_20_steps.npy --fignum=1
 ```
-If you wish to visualize a single run with agents moving on the grid then you can run:
+If you wish to visualize a single run with agents moving on the grid then you can run (The values for t and p can be changed to any values between [0,1]):
 ```bash
 python runLiveSim.py --t=0.2 --p=0.7
 ```
-The values for t and p can be changed to values [0,1]
 ---
 
 ## Documentation

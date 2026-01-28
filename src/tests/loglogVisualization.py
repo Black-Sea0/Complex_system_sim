@@ -14,9 +14,21 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 @click.command()
 @click.option('--input', required=True, help='name of input data file, stored in data folder (ex: grid_search.npy)')
-@click.option('--fignum', default=0, help='give an int value to so you do not overwrite other figures')
+@click.option('--fignum', default=0, help='give a positive int value to so you do not overwrite other figures')
 def main(input, fignum):
+    """
+    This function does one run of the simulation with the copy-collaborate ratio and turnover rate and saves the data
+    into a .nyp file to be plotted later.
 
+    Parameters
+    ----------
+    input : str
+        Name of input data file, stored in data folder (ex: grid_search.npy).
+    fignum : int
+        A number value that is added at the end of the names of the figures to make sure previous ones are not 
+        overwritten if the user does not want that.
+    """
+    assert fignum >= 0, f"fignum is expected to be an int above 0, got: {fignum}"
     avg_data = np.load(data_directory / input)
 
     plt.figure(figsize=(6, 4))
