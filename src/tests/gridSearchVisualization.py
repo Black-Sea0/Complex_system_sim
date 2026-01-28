@@ -62,6 +62,16 @@ def main(input, fignum):
     plt.savefig(f'{results_directory}/opt_p_vs_t{fignum}.png')
     plt.show()
 
+    # plot 1b: optimal copy-collaborate ratio for multiple blocks of samples, and for varying turnover ratio's
+    for t_index in range(n_t):
+        plt.scatter(t_values[t_index], np.average(p_optimal_blocks[t_index]), color='red')
+    
+    plt.xlabel('turnover ratio')
+    plt.ylabel('optimal copy-collaborate ratio')
+    plt.title(f'optimal copy-collaborate {n_samples} samples')
+    plt.savefig(f'{results_directory}/opt_p_vs_t_singular_{fignum}.png')
+    plt.show()
+
     # bootstrap: calculate slope of many random picks of points
     n_bootstrap = 10000
     slopes = np.zeros(n_bootstrap)
@@ -82,9 +92,36 @@ def main(input, fignum):
     plt.show()
 
 
-    # Plot 3: average fitness across the whole p-t range
+    # ==================
     single_avg_results = np.average(simulation_results, axis=2)
 
+    optimal_p_indices = np.argmax(single_avg_results, axis=0)
+    optimal_p = p_values[optimal_p_indices]
+    optimal_values = single_avg_results[optimal_p_indices, np.arange(len(t_values))]
+
+    linregress_output = stats.linregress(t_values, optimal_p, alternative='less')
+    print("less: ", linregress_output.pvalue)
+    linregress_output = stats.linregress(t_values, optimal_p, alternative='two-sided')
+    print("two-sided: ", linregress_output.pvalue)
+
+    n_bootstrap = 10000
+    slopes = np.zeros(n_bootstrap)
+
+    for b in range(n_bootstrap):
+        t_bootstrap = np.random.permutation(t_values)
+
+        slope, _ = np.polyfit(t_bootstrap, optimal_p, 1)
+        slopes[b] = slope
+
+    # plot 3: histogram of the slope fitting to random optimal-p t points
+    plt.hist(slopes, bins=50, edgecolor='black')
+    plt.axvline(x=linregress_output.slope, color='red', linestyle='--')
+    plt.xlabel('slope')
+    plt.title('Permutation of data points')
+    plt.savefig(f'{results_directory}/hist_permutation_{fignum}.png')
+    plt.show()
+
+    # Plot 3: average fitness across the whole p-t range
     P, T = np.meshgrid(t_values, p_values)
 
     fig = plt.figure()
