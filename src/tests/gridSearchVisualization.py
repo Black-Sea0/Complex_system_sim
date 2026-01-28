@@ -131,6 +131,40 @@ def main(input, fignum):
     plt.savefig(f'{results_directory}/avg_perform{fignum}.png')
     plt.show()
 
+    # Plot: average fitness - copy-collaborate ratio curve t=0 (2D)
+    fig2, ax2 = plt.subplots(figsize=(12, 8))
+
+    for i, t in enumerate(t_values):
+        if t == 0:
+            ax2.plot(
+                p_values,
+                single_avg_results[:, i],
+                alpha=0.8,
+                linewidth=2
+            )
+
+            opt_index = np.argmax(single_avg_results[:, i])
+            ax2.scatter(
+                p_values[opt_index],
+                single_avg_results[opt_index, i],
+                s=80,
+                marker='X'
+            )
+
+            print(
+                f't={t:.2f}, optimal p={p_values[opt_index]:.2f}, '
+                f'performance={single_avg_results[opt_index, i]:.4f}'
+            )
+
+    ax2.set_xlabel('Copy-Collaborate Ratio')
+    ax2.set_ylabel('Average Performance')
+    ax2.grid(True, alpha=0.3)
+
+    plt.title("Collab–Copy Ratio vs. Average Performance (no turnover)")
+    plt.tight_layout()
+    plt.savefig(f'{results_directory}/avg_perform{fignum}_t0.png')
+    plt.show()
+
 if __name__ == "__main__":
     main()
 
