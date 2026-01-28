@@ -40,10 +40,7 @@ This allows us to study how **agent turnover** affects:
 
 ### Hypothesis
 
-We hypothesize that increased turnover will:
-- reduce the effectiveness of collaboration
-- increase the relative payoff of copying behavior  
-because fewer experienced agents are available for meaningful collaboration.
+We hypothesize that increased turnover will have a statistically significant effect on the optimal copy-collaboration ratio.
 
 ---
 
