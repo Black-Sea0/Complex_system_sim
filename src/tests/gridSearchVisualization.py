@@ -60,17 +60,7 @@ def main(input, fignum):
     plt.xlabel('turnover ratio')
     plt.ylabel('optimal copy-collaborate ratio')
     plt.title(f'optimal copy-collaborate per block of {block_size} samples')
-    plt.savefig(f'{results_directory}/opt_p_vs_t{fignum}.png')
-    plt.show()
-
-    # plot 1b: optimal copy-collaborate ratio for multiple blocks of samples, and for varying turnover ratio's
-    for t_index in range(n_t):
-        plt.scatter(t_values[t_index], np.average(p_optimal_blocks[t_index]), color='red')
-    
-    plt.xlabel('turnover ratio')
-    plt.ylabel('optimal copy-collaborate ratio')
-    plt.title(f'optimal copy-collaborate {n_samples} samples')
-    plt.savefig(f'{results_directory}/opt_p_vs_t_singular_{fignum}.png')
+    plt.savefig(f'{results_directory}/bootstrap_opt_p_vs_t_f{fignum}.png')
     plt.show()
 
     # bootstrap: calculate slope of many random picks of points
@@ -89,7 +79,7 @@ def main(input, fignum):
     plt.axvline(x=0, color='red', linestyle='--')
     plt.xlabel('p_opt - t slope')
     plt.title('Distribution of p_opt - t slope')
-    plt.savefig(f'{results_directory}/dist_opt_p{fignum}.png')
+    plt.savefig(f'{results_directory}/boostrap_dist_opt_p_f{fignum}.png')
     plt.show()
 
 
@@ -100,10 +90,21 @@ def main(input, fignum):
     optimal_p = p_values[optimal_p_indices]
     optimal_values = single_avg_results[optimal_p_indices, np.arange(len(t_values))]
 
+    # plot 3a: optimal copy-collaborate ratio (for average across function across all samples), for varying turnover ratio's
+    plt.scatter(t_values, optimal_p, color='red')
+    
+    plt.xlabel('turnover ratio')
+    plt.ylabel('optimal copy-collaborate ratio')
+    plt.title(f'optimal copy-collaborate {n_samples} samples')
+    plt.savefig(f'{results_directory}/opt_p_vs_t_f{fignum}.png')
+    plt.grid(True, alpha=0.3)
+    plt.show()
+
     linregress_output = stats.linregress(t_values, optimal_p, alternative='less')
     print("less: ", linregress_output.pvalue)
     linregress_output = stats.linregress(t_values, optimal_p, alternative='two-sided')
     print("two-sided: ", linregress_output.pvalue)
+    print("slope: ", linregress_output.slope)
 
     n_bootstrap = 10000
     slopes = np.zeros(n_bootstrap)
@@ -114,12 +115,12 @@ def main(input, fignum):
         slope, _ = np.polyfit(t_bootstrap, optimal_p, 1)
         slopes[b] = slope
 
-    # plot 3: histogram of the slope fitting to random optimal-p t points
+    # plot 3b: histogram of the slope fitting to random optimal-p t points
     plt.hist(slopes, bins=50, edgecolor='black')
     plt.axvline(x=linregress_output.slope, color='red', linestyle='--')
     plt.xlabel('slope')
     plt.title('Permutation of data points')
-    plt.savefig(f'{results_directory}/hist_permutation_{fignum}.png')
+    plt.savefig(f'{results_directory}/hist_permutation_f{fignum}.png')
     plt.show()
 
     # Plot 3: average fitness across the whole p-t range
@@ -138,7 +139,7 @@ def main(input, fignum):
     fig.colorbar(surf, ax=ax)
     ax.grid(True, alpha=0.3)
     plt.tight_layout()
-    plt.savefig(f'{results_directory}/avg_perform_t20{fignum}.png')
+    plt.savefig(f'{results_directory}/avg_perform_3D_f{fignum}.png')
     plt.show()
 
 
@@ -165,7 +166,7 @@ def main(input, fignum):
     ax2.grid(True, alpha=0.3)
 
     plt.tight_layout()
-    plt.savefig(f'{results_directory}/avg_perform{fignum}.png')
+    plt.savefig(f'{results_directory}/avg_perform_2D_f{fignum}.png')
     plt.show()
 
     # Plot: average fitness - copy-collaborate ratio curve t=0 (2D)
@@ -199,7 +200,7 @@ def main(input, fignum):
 
     plt.title("Collab–Copy Ratio vs. Average Performance (no turnover)")
     plt.tight_layout()
-    plt.savefig(f'{results_directory}/avg_perform{fignum}_t0.png')
+    plt.savefig(f'{results_directory}/avg_perform_2D_t0_f{fignum}.png')
     plt.show()
 
 if __name__ == "__main__":
