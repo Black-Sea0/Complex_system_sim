@@ -169,7 +169,7 @@ def main(input, fignum):
     plt.savefig(f'{results_directory}/avg_perform_2D_f{fignum}.png')
     plt.show()
 
-    # Plot: average fitness - copy-collaborate ratio curve t=0 (2D)
+    # Plot 5: average fitness - copy-collaborate ratio curve t=0 (2D)
     fig2, ax2 = plt.subplots(figsize=(12, 8))
 
     for i, t in enumerate(t_values):
