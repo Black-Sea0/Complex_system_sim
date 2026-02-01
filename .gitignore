@@ -1,6 +1,8 @@
 *.venv
 *.vscode
-*.documentation
+**documentation
+**data
+**results
 .DS_Store
 
 **/__pycache__/
