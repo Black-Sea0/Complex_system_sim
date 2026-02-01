@@ -127,6 +127,12 @@ pdoc --html -o ../documentation --force .
 ```
 The documentation can then be viewed by opening `documentation/index.html`
 
+## Use of AI
+AI was used in some parts of the code to help with implementation. AI was used for:
+- Writing Docstrings quicker on some functions
+- Implementing the Mason Watts landscape by converting the R code from the github repository of our inspiration paper
+- For resolving some git merge issues 
+
 ## Authors
 Sooriya Karunaharan, Alara Karadeniz, Ivo Blok, Gileesa McCormack
 
